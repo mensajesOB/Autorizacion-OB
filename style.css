@@ -21,27 +21,32 @@ body {
   margin: auto;
 }
 
-/* Logo autoajustado */
+/* Logo ocupa todo el ancho del formulario */
 .login-box img.logo {
-  max-width: 150px;
+  width: 100%;
+  max-width: 360px;   /* nunca pasa del tamaño del formulario */
   height: auto;
   margin: 0 auto 20px auto;
   display: block;
 }
 
+/* Títulos centrados */
 h1, h2 {
   font-size: 18px;
   margin-bottom: 15px;
+  text-align: center;
 }
 
+/* Labels centrados y en negrita */
 .login-box label {
   display: block;
-  text-align: left;
+  text-align: center;
   margin-top: 10px;
   font-size: 14px;
-  font-weight: bold; /* ✅ negrita para RUT, Contraseña, Teléfono */
+  font-weight: bold;
 }
 
+/* Inputs del login */
 .login-box input[type="text"],
 .login-box input[type="password"],
 .login-box input[type="tel"],
@@ -156,9 +161,16 @@ input.sms { width: 120px; }
 @media (max-width: 480px) {
   .login-box { max-width: 95%; padding: 15px; }
 
-  .login-box img.logo { max-width: 120px; margin-bottom: 15px; }
+  /* Logo adaptado en móviles */
+  .login-box img.logo {
+    width: 100%;
+    max-width: 95%;
+    margin-bottom: 15px;
+  }
 
-  h1, h2 { font-size: 16px; }
+  h1, h2 { font-size: 16px; text-align: center; }
+
+  .login-box label { font-size: 13px; text-align: center; }
 
   .login-box input,
   .login-box button { font-size: 14px; }
