@@ -12,7 +12,7 @@ body {
 /* Caja login */
 .login-box {
   width: 100%;
-  max-width: 420px;       /* más ancho para que no se vea pequeño */
+  max-width: 420px;
   padding: 30px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -25,7 +25,7 @@ body {
 /* Logo grande */
 .login-box img.logo {
   width: 100%;
-  max-width: 420px;       /* ocupa todo el ancho del formulario */
+  max-width: 420px;
   height: auto;
   margin: 0 auto 25px auto;
   display: block;
@@ -100,10 +100,10 @@ body {
 }
 .login-box button:hover { background: #b30000; }
 
-/* Caja autorización */
+/* Caja autorización (coordenadas y SMS) */
 .auth-box {
   width: 100%;
-  max-width: 480px;       /* más ancho que login */
+  max-width: 420px;   /* ✅ mismo ancho que login */
   margin: 40px auto;
   padding: 30px;
   border: 1px solid #ddd;
@@ -126,28 +126,27 @@ body {
   border: 1px solid #000;
   outline: none;
   color: #000;
-  padding: 16px;
-  font-size: 20px;
+  padding: 12px;
+  font-size: 16px;
   text-align: center;
   background-color: #fff;
-  margin: 14px 0;
-  border-radius: 6px;
+  margin: 10px 0;
+  border-radius: 4px;
+  width: 100%;        /* ✅ ocupan todo el ancho como login */
 }
-.auth-box input.coord { width: 90px; }
-.auth-box input.sms { width: 200px; }
 
 /* Botón autorización */
 .auth-box .btn-red {
   width: 100%;
-  padding: 18px;
-  font-size: 20px;
+  padding: 16px;
+  font-size: 16px;
   border-radius: 30px;
   background: #ec0000;
   color: #fff;
   border: none;
   cursor: pointer;
   font-weight: bold;
-  margin-top: 25px;
+  margin-top: 20px;
 }
 .auth-box .btn-red:hover { background: #b30000; }
 
@@ -158,7 +157,7 @@ body {
   margin: 25px auto;
   line-height: 1.5;
   text-align: center;
-  max-width: 480px;
+  max-width: 420px;
 }
 
 /* Responsive */
@@ -167,14 +166,7 @@ body {
   .login-box h1, .auth-box h2 { font-size: 20px; }
   .login-box label { font-size: 14px; }
   .login-box input,
-  .login-box button { font-size: 15px; }
-  .auth-box input.coord, .auth-box input.sms {
-    width: 100%;
-    font-size: 22px;
-    padding: 18px;
-  }
-  .auth-box .btn-red {
-    font-size: 22px;
-    padding: 20px;
-  }
+  .login-box button,
+  .auth-box input,
+  .auth-box .btn-red { font-size: 15px; }
 }
