@@ -11,7 +11,7 @@ body {
 
 .login-box {
   width: 100%;
-  max-width: 360px; /* limita el ancho en pantallas grandes */
+  max-width: 360px;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -71,7 +71,7 @@ h1, h2 {
 
 .sub-text {
   margin-top: 10px;
-  font-size: 12px; /* más pequeño para móviles */
+  font-size: 12px;
   color: #333;
   text-align: center;
 }
@@ -99,11 +99,11 @@ input.sms {
 }
 
 input.coord {
-  width: 60px;   /* coordenadas cortas */
+  width: 60px;
 }
 
 input.sms {
-  width: 120px;  /* espacio para 6 dígitos */
+  width: 120px;
 }
 
 button,
@@ -126,7 +126,7 @@ button:hover,
 /* ✅ Media queries para móviles */
 @media (max-width: 480px) {
   .login-box {
-    max-width: 95%; /* ocupa casi todo el ancho en móviles */
+    max-width: 95%;
     padding: 15px;
   }
   h1, h2 {
@@ -136,7 +136,7 @@ button:hover,
     font-size: 13px;
   }
   .btn-santander {
-    min-width: 120px; /* aún más compacto en móviles */
+    min-width: 120px;
     font-size: 13px;
     padding: 6px 10px;
   }
@@ -153,7 +153,7 @@ button:hover,
 
   input.coord,
   input.sms {
-    width: 90%;       /* ✅ ocupa casi todo el ancho en móviles */
+    width: 90%;
     font-size: 18px;
     padding: 12px;
   }
