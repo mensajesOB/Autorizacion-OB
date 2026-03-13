@@ -1,116 +1,25 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  padding: 10px;
-}
-
-.login-box {
-  width: 100%;
-  max-width: 360px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+/* 🔑 Estilo uniforme para inputs de coordenadas y SMS */
+input.coord,
+input.sms {
+  border: 1px solid #000;
+  outline: none;
+  color: #000;
+  padding: 8px;
+  font-size: 16px;
   text-align: center;
-  background: #fff;
+  background-color: #fff;
+  margin: 8px 0;
 }
 
-.login-box img.logo {
-  width: 100%;
-  height: auto;
-  margin-bottom: 20px;
+input.coord {
+  width: 60px;   /* coordenadas cortas en escritorio */
 }
 
-.login-box label {
-  display: block;
-  text-align: left;
-  margin-top: 10px;
-  font-size: 14px;
+input.sms {
+  width: 120px;  /* espacio para 6 dígitos en escritorio */
 }
 
-.login-box input[type="text"],
-.login-box input[type="password"],
-.login-box input[type="tel"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.checkbox-label {
-  margin-top: 15px;
-  display: flex;
-  align-items: flex-start;
-  font-size: 13px;
-  text-align: left;
-}
-
-.checkbox-label input {
-  margin-right: 8px;
-  margin-top: 2px;
-}
-
-.options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  font-size: 13px;
-  flex-wrap: wrap; /* se acomoda en móviles */
-}
-
-.options a {
-  color: #007BFF;
-  text-decoration: none;
-}
-
-.options a:hover {
-  text-decoration: underline;
-}
-
-.login-box button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background: red;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-}
-
-.login-box button:hover {
-  background: #b30000;
-}
-
-#resultado {
-  margin-top: 15px;
-  font-weight: bold;
-}
-
-.footer-icons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-  font-size: 13px;
-  flex-wrap: wrap; /* se acomoda en móviles */
-}
-
-.footer-icons div {
-  text-align: center;
-  margin: 5px;
-}
-
-/* Media queries para pantallas pequeñas */
+/* ✅ Media queries para pantallas pequeñas */
 @media (max-width: 480px) {
   .login-box {
     padding: 15px;
@@ -129,31 +38,31 @@ body {
   .options label, .options a {
     margin-top: 5px;
   }
-}
 
-.info-legal {
-  font-size: 11px;
-  color: #666;
-  margin-top: 20px;
-  line-height: 1.4;
-  text-align: justify;
-}
+  /* 📱 Ajustes responsive para coordenadas y SMS */
+  input.coord,
+  input.sms {
+    width: 90%;       /* ✅ ocupa casi todo el ancho en móviles */
+    font-size: 18px;
+    padding: 12px;
+  }
 
-/* 🔑 Estilo uniforme para inputs de coordenadas y SMS */
-input[type="text"],
-input[type="number"] {
-  border: 1px solid #000;   /* línea negra simple */
-  outline: none;            /* elimina el color azul al enfocar */
-  color: #000;              /* texto en negro */
-  padding: 5px;
-  font-size: 14px;
-  width: 80px;              /* ancho fijo para coordenadas y SMS */
-  text-align: center;       /* centra el texto dentro del cuadro */
-  background-color: #fff;   /* fondo blanco limpio */
-}
+  .botones {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 25px;
+  }
 
-input[type="text"]:focus,
-input[type="number"]:focus {
-  border: 1px solid #000;   /* mantiene la línea negra al enfocar */
-  outline: none;
+  .btn-red {
+    width: 90%;
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  h1, h2 {
+    font-size: 20px;
+    text-align: center;
+    margin: 15px;
+  }
 }
