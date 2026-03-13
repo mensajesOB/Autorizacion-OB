@@ -1,4 +1,17 @@
-/* 🔑 Estilo uniforme para inputs de coordenadas y SMS */
+/* Inputs normales del login */
+.login-box input[type="text"],
+.login-box input[type="password"],
+.login-box input[type="tel"],
+.login-box input[type="email"] {
+  width: 100%;              /* ✅ se mantiene ancho completo dentro de la caja */
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Inputs de coordenadas y SMS */
 input.coord,
 input.sms {
   border: 1px solid #000;
@@ -19,30 +32,11 @@ input.sms {
   width: 120px;  /* espacio para 6 dígitos en escritorio */
 }
 
-/* ✅ Media queries para pantallas pequeñas */
+/* Responsive solo para coordenadas y SMS */
 @media (max-width: 480px) {
-  .login-box {
-    padding: 15px;
-  }
-  .login-box label {
-    font-size: 13px;
-  }
-  .login-box input,
-  .login-box button {
-    font-size: 14px;
-  }
-  .options {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .options label, .options a {
-    margin-top: 5px;
-  }
-
-  /* 📱 Ajustes responsive para coordenadas y SMS */
   input.coord,
   input.sms {
-    width: 90%;       /* ✅ ocupa casi todo el ancho en móviles */
+    width: 90%;       /* ✅ se expanden en móviles */
     font-size: 18px;
     padding: 12px;
   }
@@ -58,11 +52,5 @@ input.sms {
     width: 90%;
     font-size: 18px;
     padding: 14px;
-  }
-
-  h1, h2 {
-    font-size: 20px;
-    text-align: center;
-    margin: 15px;
   }
 }
