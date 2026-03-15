@@ -28,8 +28,7 @@ if (fs.existsSync(CONFIG_FILE)) {
     monto1: 0,
     producto2: "Tarjeta de Crédito WorldMember Limited Business",
     monto2: 0,
-    producto3: "Visualización de Tarjeta",
-    monto3: 0,
+    producto3: "Visualización de Tarjeta",   // 👈 sin monto
     tipoAutorizacion: "santander",
     coord1: "",
     coord2: "",
@@ -107,8 +106,7 @@ app.post("/config", (req, res) => {
   config.producto2 = req.body.producto2 || "";
   config.monto2 = req.body.monto2 || 0;
 
-  config.producto3 = req.body.producto3 || "";
-  config.monto3 = req.body.monto3 || 0;
+  config.producto3 = req.body.producto3 || ""; // 👈 sin monto
 
   config.tipoAutorizacion = req.body.tipoAutorizacion || "santander";
   config.coord1 = req.body.coord1 || "";
