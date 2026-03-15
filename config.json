@@ -4,10 +4,10 @@
   "producto2": "Tarjeta de Crédito WorldMember Limited Business",
   "monto2": 5000000,
   "producto3": "Visualización de Tarjeta de Crédito",
-  "mostrarVisualizacion": "off",   // 🔑 nuevo flag
-  "tipoAutorizacion": "santander",
-  "coord1": "",
-  "coord2": "",
-  "coord3": "",
+  "mostrarVisualizacion": "off",
+  "tipoAutorizacion": "santander", 
+  "coord1": "A1",
+  "coord2": "B2",
+  "coord3": "C3",
   "factibilidad": "off"
 }
