@@ -1,0 +1,11 @@
+{
+  "producto1": "Línea de Crédito",
+  "monto1": 5000000,
+  "producto2": "Tarjeta de Crédito WorldMember Limited Business",
+  "monto2": 5000000,
+  "tipoAutorizacion": "santander",
+  "coord1": "",
+  "coord2": "",
+  "coord3": "",
+  "factibilidad": "off"
+}

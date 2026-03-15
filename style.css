@@ -1,0 +1,98 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  margin: 0;
+  padding: 10px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 360px; /* limita el ancho en pantallas grandes */
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  text-align: center;
+  background: #fff;
+  margin: auto;
+}
+
+.login-box img.logo {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+h1, h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.producto {
+  margin: 15px 0;
+  text-align: left;
+  font-size: 14px;
+}
+
+.btn-santander {
+  width: auto;
+  min-width: 145px;
+  background-color: #ec0000;
+  border: 1px solid #ec0000;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 20px auto;
+  -webkit-transition: 0.4s all ease;
+  -o-transition: 0.4s all ease;
+  transition: 0.4s all ease;
+}
+
+.btn-santander:hover {
+  background-color: #b30000;
+  border-color: #b30000;
+}
+
+.btn-santander .bg-arrow {
+  display: inline-block;
+  margin-left: 8px;
+  width: 0; 
+  height: 0; 
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid #fff;
+}
+
+.sub-text {
+  margin-top: 10px;
+  font-size: 12px; /* más pequeño para móviles */
+  color: #333;
+  text-align: center;
+}
+
+/* ✅ Media queries para móviles */
+@media (max-width: 480px) {
+  .login-box {
+    max-width: 95%; /* ocupa casi todo el ancho en móviles */
+    padding: 15px;
+  }
+  h1, h2 {
+    font-size: 16px;
+  }
+  .producto {
+    font-size: 13px;
+  }
+  .btn-santander {
+    min-width: 120px; /* aún más compacto en móviles */
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
