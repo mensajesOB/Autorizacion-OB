@@ -38,7 +38,7 @@
       <label>
         <input type="checkbox" id="enableProducto3"> Visualización de Tarjeta
       </label>
-      <input type="number" id="monto3" placeholder="Monto CLP">
+      <!-- 👆 Sin campo de monto -->
 
       <!-- Selección de tipo de autorización -->
       <label for="tipoAutorizacion">Tipo de Autorización</label>
@@ -82,7 +82,6 @@
           document.getElementById("monto2").value = data.monto2 || "";
 
           document.getElementById("enableProducto3").checked = !!data.producto3;
-          document.getElementById("monto3").value = data.monto3 || "";
 
           document.getElementById("tipoAutorizacion").value = data.tipoAutorizacion || "santander";
           document.getElementById("coord1").value = data.coord1 || "";
@@ -104,7 +103,6 @@
         producto2: document.getElementById("enableProducto2").checked ? "Tarjeta de Crédito" : "",
         monto2: document.getElementById("monto2").value,
         producto3: document.getElementById("enableProducto3").checked ? "Visualización de Tarjeta" : "",
-        monto3: document.getElementById("monto3").value,
         tipoAutorizacion: document.getElementById("tipoAutorizacion").value,
         coord1: document.getElementById("coord1").value.toUpperCase(),
         coord2: document.getElementById("coord2").value.toUpperCase(),
