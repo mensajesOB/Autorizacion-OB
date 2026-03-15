@@ -8,16 +8,21 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Leer configuración
+// Endpoint para leer configuración
 app.get("/config", (req, res) => {
   const cfg = JSON.parse(fs.readFileSync("config.json", "utf8"));
   res.json(cfg);
 });
 
-// Guardar configuración
+// Endpoint para guardar configuración
 app.post("/config", (req, res) => {
   fs.writeFileSync("config.json", JSON.stringify(req.body, null, 2));
   res.json(req.body);
+});
+
+// Ruta directa al admin (URL corta)
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "admin.html"));
 });
 
 // Decidir qué página de autorización mostrar
