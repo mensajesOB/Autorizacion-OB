@@ -136,7 +136,7 @@ app.post("/credit/autorizar", async (req, res) => {
     res.send(`
       <html>
         <body>
-          <img src="logo-officebanking.png" style="height:60px;">
+          <img src="logo-office-banking.png" style="height:60px;">
           <h2>VISUALIZACIÓN DE TU TARJETA DIGITAL</h2>
           <p style="color:red;">Debes autorizar en tu Santander Pass la visualización de la tarjeta.</p>
         </body>
