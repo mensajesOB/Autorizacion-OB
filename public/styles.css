@@ -1,159 +1,118 @@
+/* Fuente y base */
 body {
   font-family: Arial, sans-serif;
-  background: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
   margin: 0;
-  padding: 10px;
-}
-
-.login-box {
-  width: 100%;
-  max-width: 360px;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  text-align: center;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Contenedores principales */
+.login-box, .productos-box {
+  max-width: 420px;
+  margin: 0 auto;
   background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
 }
 
-.login-box img.logo {
-  width: 100%;
-  height: auto;
-  margin-bottom: 20px;
-}
-
-.login-box label {
+/* Logo responsivo */
+.logo {
+  max-width: 180px;   /* límite de ancho */
+  height: auto;       /* mantiene proporción */
   display: block;
-  text-align: left;
-  margin-top: 10px;
-  font-size: 14px;
+  margin: 0 auto 20px auto;
 }
 
-.login-box input[type="text"],
-.login-box input[type="password"],
-.login-box input[type="tel"] {
+@media (max-width: 600px) {
+  .logo {
+    max-width: 140px; /* más pequeño en pantallas chicas */
+  }
+}
+
+/* Formularios */
+form label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="tel"],
+form input[type="email"],
+form input[type="number"],
+form select {
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
+  margin-top: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
+  box-sizing: border-box;
 }
 
-.checkbox-label {
-  margin-top: 15px;
-  display: flex;
-  align-items: flex-start;
-  font-size: 13px;
-  text-align: left;
-}
-
-.checkbox-label input {
-  margin-right: 8px;
-  margin-top: 2px;
-}
-
-.options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  font-size: 13px;
-  flex-wrap: wrap; /* se acomoda en móviles */
-}
-
-.options a {
-  color: #007BFF;
-  text-decoration: none;
-}
-
-.options a:hover {
-  text-decoration: underline;
-}
-
-.login-box button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background: red;
+/* Botones */
+button, .btn-red {
+  background-color: red;
   color: white;
+  padding: 12px 20px;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
   font-weight: bold;
-  font-size: 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 18px;
+  width: 100%;
 }
 
-.login-box button:hover {
-  background: #b30000;
+button:hover, .btn-red:hover {
+  background-color: darkred;
 }
 
-#resultado {
+/* Mensajes */
+#resultado, #mensaje {
   margin-top: 15px;
   font-weight: bold;
-}
-
-.footer-icons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-  font-size: 13px;
-  flex-wrap: wrap; /* se acomoda en móviles */
-}
-
-.footer-icons div {
+  color: red;
   text-align: center;
-  margin: 5px;
 }
 
-/* Media queries para pantallas pequeñas */
-@media (max-width: 480px) {
-  .login-box {
-    padding: 15px;
-  }
-  .login-box label {
-    font-size: 13px;
-  }
-  .login-box input,
-  .login-box button {
-    font-size: 14px;
-  }
-  .options {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .options label, .options a {
-    margin-top: 5px;
-  }
+/* Spinner */
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid red;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin: 20px auto;
 }
 
-.info-legal {
-  font-size: 11px;
-  color: #666;
-  margin-top: 20px;
-  line-height: 1.4;
-  text-align: justify;
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
 }
 
-/* 🔑 Estilo uniforme para inputs de coordenadas y SMS */
-input[type="text"],
-input[type="number"] {
-  border: 1px solid #000;   /* línea negra simple */
-  outline: none;            /* elimina el color azul al enfocar */
-  color: #000;              /* texto en negro */
-  padding: 5px;
-  font-size: 14px;
-  width: 80px;              /* ancho fijo para coordenadas y SMS */
-  text-align: center;       /* centra el texto dentro del cuadro */
-  background-color: #fff;   /* fondo blanco limpio */
+/* Ocultar elementos */
+.hidden {
+  display: none;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus {
-  border: 1px solid #000;   /* mantiene la línea negra al enfocar */
-  outline: none;
+/* Productos */
+.producto {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
+.producto label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.producto input[type="radio"] {
+  margin-right: 10px;
 }
