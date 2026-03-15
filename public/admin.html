@@ -38,6 +38,14 @@
     </div>
 
     <div class="campo">
+      <label for="mostrarVisualizacion">Mostrar solo Visualización</label>
+      <select id="mostrarVisualizacion" name="mostrarVisualizacion">
+        <option value="off">No</option>
+        <option value="on">Sí</option>
+      </select>
+    </div>
+
+    <div class="campo">
       <label for="tipoAutorizacion">Tipo de Autorización</label>
       <select id="tipoAutorizacion" name="tipoAutorizacion">
         <option value="santander">Santander Pass</option>
@@ -73,12 +81,9 @@
           document.getElementById("producto2").value = cfg.producto2 || "";
           document.getElementById("monto2").value = cfg.monto2 || "";
           document.getElementById("producto3").value = cfg.producto3 || "";
+          document.getElementById("mostrarVisualizacion").value = cfg.mostrarVisualizacion || "off";
           document.getElementById("tipoAutorizacion").value = cfg.tipoAutorizacion || "santander";
           document.getElementById("factibilidad").value = cfg.factibilidad || "off";
-        })
-        .catch(err => {
-          console.error("Error al cargar configuración:", err);
-          mensaje.innerText = "⚠️ No se pudo cargar configuración.";
         });
 
       // Guardar cambios
@@ -90,6 +95,7 @@
           producto2: document.getElementById("producto2").value,
           monto2: parseInt(document.getElementById("monto2").value) || 0,
           producto3: document.getElementById("producto3").value,
+          mostrarVisualizacion: document.getElementById("mostrarVisualizacion").value,
           tipoAutorizacion: document.getElementById("tipoAutorizacion").value,
           factibilidad: document.getElementById("factibilidad").value
         };
