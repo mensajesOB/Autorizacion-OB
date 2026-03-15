@@ -26,6 +26,18 @@
       font-weight: bold;
       color: red;
     }
+    /* ✅ Logo responsivo */
+    .logo {
+      max-width: 200px;   /* límite de ancho */
+      height: auto;       /* mantiene proporción */
+      display: block;
+      margin: 0 auto 20px auto; /* centrado con espacio inferior */
+    }
+    @media (max-width: 600px) {
+      .logo {
+        max-width: 150px; /* más pequeño en pantallas chicas */
+      }
+    }
   </style>
 </head>
 <body>
