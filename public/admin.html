@@ -88,9 +88,9 @@
 
       const config = {
         producto1: document.getElementById("producto1").checked ? "Línea de Crédito" : "",
-        monto1: document.getElementById("monto1").value,
+        monto1: document.getElementById("producto1").checked ? document.getElementById("monto1").value : "",
         producto2: document.getElementById("producto2").checked ? "Tarjeta de Crédito" : "",
-        monto2: document.getElementById("monto2").value,
+        monto2: document.getElementById("producto2").checked ? document.getElementById("monto2").value : "",
         producto3: document.getElementById("producto3").checked ? "Visualización de Tarjeta de Crédito" : "",
         tipoAutorizacion: document.getElementById("tipoAutorizacion").value,
         coord1: document.getElementById("coord1").value.toUpperCase(),
