@@ -98,13 +98,13 @@
             contador++;
           }
 
-          // Producto 3 (Visualización de Tarjeta)
+          // Producto 3 (Visualización de Tarjeta, sin monto)
           if(data.producto3 && data.producto3.trim() !== ""){
             contenedor.innerHTML += `
               <div class="producto">
                 <label>
                   <input type="radio" name="opcion" value="producto3"> 
-                  <span>${contador}.- ${data.producto3} ${data.monto3 ? "por " + formatoCLP(data.monto3) : ""}</span>
+                  <span>${contador}.- ${data.producto3}</span>
                 </label>
               </div>`;
             contador++;
