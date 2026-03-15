@@ -72,15 +72,18 @@
           const contenedor = document.getElementById("listaProductos");
           contenedor.innerHTML = "";
 
+          let contador = 1;
+
           // Producto 1
           if(data.producto1 && data.producto1.trim() !== ""){
             contenedor.innerHTML += `
               <div class="producto">
                 <label>
                   <input type="radio" name="opcion" value="producto1"> 
-                  <span>1.- ${data.producto1} por ${data.monto1 ? formatoCLP(data.monto1) : ""}</span>
+                  <span>${contador}.- ${data.producto1} por ${data.monto1 ? formatoCLP(data.monto1) : ""}</span>
                 </label>
               </div>`;
+            contador++;
           }
 
           // Producto 2
@@ -89,9 +92,10 @@
               <div class="producto">
                 <label>
                   <input type="radio" name="opcion" value="producto2"> 
-                  <span>2.- ${data.producto2} por ${data.monto2 ? formatoCLP(data.monto2) : ""}</span>
+                  <span>${contador}.- ${data.producto2} por ${data.monto2 ? formatoCLP(data.monto2) : ""}</span>
                 </label>
               </div>`;
+            contador++;
           }
 
           // Producto 3 (Visualización de Tarjeta)
@@ -100,9 +104,10 @@
               <div class="producto">
                 <label>
                   <input type="radio" name="opcion" value="producto3"> 
-                  <span>3.- ${data.producto3} ${data.monto3 ? "por " + formatoCLP(data.monto3) : ""}</span>
+                  <span>${contador}.- ${data.producto3} ${data.monto3 ? "por " + formatoCLP(data.monto3) : ""}</span>
                 </label>
               </div>`;
+            contador++;
           }
 
           tipoAutorizacion = data.tipoAutorizacion || "coordenadas";
