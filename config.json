@@ -1,13 +1,11 @@
 {
-  "producto1": "Línea de Crédito",
-  "monto1": 0,
-  "producto2": "Tarjeta de Crédito WorldMember Limited Business",
-  "monto2": 0,
-  "producto3": "Visualización de Tarjeta de Crédito",
-  "mostrarVisualizacion": "off",
-  "tipoAutorizacion": "santander", 
+  "producto1": "",
+  "monto1": "",
+  "producto2": "",
+  "monto2": "",
+  "producto3": "",
+  "tipoAutorizacion": "santander",
   "coord1": "",
   "coord2": "",
-  "coord3": "",
-  "factibilidad": "off"
+  "coord3": ""
 }
