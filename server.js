@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
-const session = require("express-session"); // ✅ agregado
 
 // Si tu Node es <18, instala node-fetch y descomenta:
 // const fetch = require("node-fetch");
@@ -11,14 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
-
-// ✅ Configuración de sesión con expiración de 5 minutos
-app.use(session({
-  secret: "clave-secreta-super-segura", // cámbiala por algo único
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 5 * 60 * 1000 } // 5 minutos
-}));
 
 // ✅ Middleware para proteger rutas
 function requireLogin(req, res, next) {
