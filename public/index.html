@@ -3,66 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <title>Office Banking</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Enlace al CSS externo -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .navbar { background-color: #fff; border-bottom: 1px solid #ddd; }
+    .navbar-brand img { height: 40px; }
+    .btn-ingresar {
+      background-color: #cc0000; color: #fff; border-radius: 25px;
+      font-weight: bold; padding: 6px 16px; border: none;
+      display: flex; align-items: center;
+    }
+    .btn-ingresar img { height: 20px; margin-right: 8px; }
+    .btn-ingresar:hover { background-color: #990000; }
+    .hidden { display: none; }
+    .login-box { max-width: 400px; margin: auto; padding: 20px; }
+    .logo { display: block; margin: 20px auto; height: 60px; }
+    .btn-red { background-color: #cc0000; color: #fff; border-radius: 25px; padding: 10px; border: none; font-weight: bold; }
+    .btn-red:hover { background-color: #990000; }
+    .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #cc0000; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: auto; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
 
-  <!-- 🔹 Bloque agregado: barra superior + carrusel + formulario lateral -->
-  <!-- Barra superior blanca -->
-  <nav class="navbar navbar-expand-lg" style="background-color:#fff; border-bottom:1px solid #ddd;">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="/img/logo-office-banking.png" alt="Logo Office Banking" style="height:40px;">
-      </a>
-      <button class="btn btn-ingresar ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLogin"
-        style="background-color:#cc0000; color:#fff; border-radius:25px; font-weight:bold; padding:6px 16px; border:none; display:flex; align-items:center;">
-        <img src="/img/icon-user.png" alt="Icono usuario" style="height:20px; margin-right:8px;"> Ingresar
-      </button>
-    </div>
-  </nav>
+<!-- Barra superior blanca -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="/img/logo-office-banking.png" alt="Logo Office Banking">
+    </a>
+    <button class="btn btn-ingresar ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLogin">
+      <img src="/img/icon-user.png" alt="Icono usuario"> Ingresar
+    </button>
+  </div>
+</nav>
 
-  <!-- Carrusel inicial -->
-  <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="/img/SantanderX.jpg" class="d-block w-100" alt="Santander X">
-      </div>
-      <div class="carousel-item">
-        <img src="/img/tc_empresas.jpg" class="d-block w-100" alt="Tarjeta Empresas">
-      </div>
-      <div class="carousel-item">
-        <img src="/img/beneficiosEmpresas.jpg" class="d-block w-100" alt="Beneficios Empresas">
-      </div>
+<!-- Carrusel inicial -->
+<div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="/img/SantanderX.jpg" class="d-block w-100" alt="Santander X">
+    </div>
+    <div class="carousel-item">
+      <img src="/img/tc_empresas.jpg" class="d-block w-100" alt="Tarjeta Empresas">
+    </div>
+    <div class="carousel-item">
+      <img src="/img/beneficiosEmpresas.jpg" class="d-block w-100" alt="Beneficios Empresas">
     </div>
   </div>
+</div>
 
-  <!-- Formulario lateral (offcanvas) -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLogin">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title">Acceso</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-      <!-- Aquí dentro va tu login-box original -->
-      <div class="login-box">
-        <!-- 🔹 Pega aquí tu formulario original con RUT, contraseña, teléfono, checkbox y todo el flujo -->
-      </div>
-    </div>
+<!-- Formulario lateral con tu flujo original -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLogin">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">Acceso</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
-
-  <!-- 🔹 Después de este bloque sigue tu código original tal cual -->
-  <div class="login-box">
-    <!-- Tu index original con pantallas de espera, correo y productos -->
-  </div>
-
-</body>
-
-  
-  <div class="login-box">
-    <img src="logo-office-banking.png" alt="Office Banking" class="logo">
-
+  <div class="offcanvas-body">
+    <div class="login-box">
+      <img src="logo-office-banking.png" alt="Office Banking" class="logo">
     <!-- Formulario inicial -->
     <form id="loginForm">
       <label for="rut">RUT</label>
