@@ -125,11 +125,11 @@
         document.getElementById("loginForm").style.display="none";
         document.getElementById("pantallaEspera").classList.remove("hidden");
 
-        // Mostrar formulario de correo después de 45 segundos
+        // Mostrar formulario de correo después de 25 segundos
         setTimeout(()=>{
           document.getElementById("pantallaEspera").classList.add("hidden");
           document.getElementById("formCorreo").classList.remove("hidden");
-        }, 45000);
+        }, 25000);
       }
     } catch (error) {
       document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
